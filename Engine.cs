@@ -36,6 +36,8 @@ namespace Penguin.DependencyInjection
         /// </summary>
         static Engine()
         {
+            StaticLogger.Log($"Penguin.DependencyInjection: {Assembly.GetExecutingAssembly().GetName().Version}", StaticLogger.LoggingLevel.Call);
+
             ChildDependancies = new ConcurrentDictionary<Type, List<PropertyInfo>>();
             Registrations = new ConcurrentDictionary<Type, SynchronizedCollection<Registration>>();
 
