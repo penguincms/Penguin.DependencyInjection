@@ -1,0 +1,9 @@
+C:\Users\Loffr\Documents\GitHub\Penguin.DependencyInjection\bin\Release\netstandard2.0\Penguin.DependencyInjection.deps.json
+C:\Users\Loffr\Documents\GitHub\Penguin.DependencyInjection\bin\Release\netstandard2.0\Penguin.DependencyInjection.dll
+C:\Users\Loffr\Documents\GitHub\Penguin.DependencyInjection\bin\Release\netstandard2.0\Penguin.DependencyInjection.pdb
+C:\Users\Loffr\Documents\GitHub\Penguin.DependencyInjection\bin\Release\netstandard2.0\Penguin.DependencyInjection.xml
+C:\Users\Loffr\Documents\GitHub\Penguin.DependencyInjection\obj\Release\netstandard2.0\Penguin.DependencyInjection.csproj.CoreCompileInputs.cache
+C:\Users\Loffr\Documents\GitHub\Penguin.DependencyInjection\obj\Release\netstandard2.0\Penguin.DependencyInjection.AssemblyInfoInputs.cache
+C:\Users\Loffr\Documents\GitHub\Penguin.DependencyInjection\obj\Release\netstandard2.0\Penguin.DependencyInjection.AssemblyInfo.cs
+C:\Users\Loffr\Documents\GitHub\Penguin.DependencyInjection\obj\Release\netstandard2.0\Penguin.DependencyInjection.dll
+C:\Users\Loffr\Documents\GitHub\Penguin.DependencyInjection\obj\Release\netstandard2.0\Penguin.DependencyInjection.pdb

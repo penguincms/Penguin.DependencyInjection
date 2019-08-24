@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Penguin.Debugging;
 
 namespace Penguin.DependencyInjection
 {
@@ -55,7 +56,7 @@ namespace Penguin.DependencyInjection
 
                     if (t.ImplementsInterface<IRegisterDependencies>())
                     {
-                        Console.WriteLine($"DependencyInjector: Registering {nameof(IRegisterDependencies)} of type {t.FullName} from assembly {t.Assembly.FullName}");
+                        StaticLogger.Log($"DependencyInjector: Registering {nameof(IRegisterDependencies)} of type {t.FullName} from assembly {t.Assembly.FullName}", StaticLogger.LoggingLevel.Call);
                         (Activator.CreateInstance(t) as IRegisterDependencies).RegisterDependencies();
                     }
 
@@ -72,11 +73,9 @@ namespace Penguin.DependencyInjection
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Failed to load information for type: " + t.FullName);
-                    Console.WriteLine(ex.StackTrace);
-                    Console.WriteLine(ex.Message);
-                    Debug.WriteLine("Failed to load information for type: " + t.FullName);
-                    Debug.WriteLine(ex.Message);
+                    StaticLogger.Log("Failed to load information for type: " + t.FullName, StaticLogger.LoggingLevel.Call);
+                    StaticLogger.Log(ex.StackTrace, StaticLogger.LoggingLevel.Call);
+                    StaticLogger.Log(ex.Message, StaticLogger.LoggingLevel.Call);
                 }
             }
         }

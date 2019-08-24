@@ -1,4 +1,5 @@
-﻿using Penguin.DependencyInjection.Objects;
+﻿using Penguin.Debugging;
+using Penguin.DependencyInjection.Objects;
 using Penguin.DependencyInjection.ServiceProviders;
 using System;
 
@@ -157,6 +158,10 @@ namespace Penguin.DependencyInjection
 
         internal static void AddRegistration(Registration dr)
         {
+            if (StaticLogger.Level != StaticLogger.LoggingLevel.None) {
+                StaticLogger.Log($"DI: Registering {dr.RegisteredType.FullName} => { dr.ToInstantiate.FullName} ({dr.ServiceProvider.Name})", StaticLogger.LoggingLevel.Call);
+            }
+
             if (!Registrations.ContainsKey(dr.RegisteredType))
             {
                 Registrations.TryAdd(dr.RegisteredType, new SynchronizedCollection<Registration>());
