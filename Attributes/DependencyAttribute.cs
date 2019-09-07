@@ -7,8 +7,6 @@ namespace Penguin.DependencyInjection.Attributes
     /// </summary>
     public sealed class DependencyAttribute : Attribute
     {
-        #region Properties
-
         /// <summary>
         /// Can be used to specify a default registration type if the property is not registered when resolved
         /// </summary>
@@ -18,10 +16,6 @@ namespace Penguin.DependencyInjection.Attributes
         /// I dont actually know what the intent of this was so dont use it
         /// </summary>
         public bool FindService { get; set; }
-
-        #endregion Properties
-
-        #region Constructors
 
         /// <summary>
         /// Creates an instance of the attribute instructing the injector to use a specified type if this property type is unregistered
@@ -40,7 +34,5 @@ namespace Penguin.DependencyInjection.Attributes
         {
             FindService = findService;
         }
-
-        #endregion Constructors
     }
 }

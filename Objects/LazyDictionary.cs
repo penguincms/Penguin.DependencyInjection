@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Penguin.DependencyInjection.Objects
 {
-
     /// <summary>
     /// Attempts to return a dictionary without constructing the list until it is accessed
     /// </summary>
@@ -11,8 +10,6 @@ namespace Penguin.DependencyInjection.Objects
     /// <typeparam name="TValue">The Value Type of the dictionary</typeparam>
     public class LazyDictionary<TKey, TValue> : Dictionary<TKey, TValue> where TValue : class
     {
-        #region Constructors
-
         /// <summary>
         /// Constructs a new instance of this object
         /// </summary>
@@ -22,20 +19,12 @@ namespace Penguin.DependencyInjection.Objects
             this.loadMe = loadingMethod;
         }
 
-        #endregion Constructors
-
-        #region Indexers
-
         /// <summary>
         /// Returns a value from the dictionary based on the key
         /// </summary>
         /// <param name="key">The key to check for</param>
         /// <returns>The value associated with the key</returns>
         public new TValue this[TKey key] => this.GetValue(key);
-
-        #endregion Indexers
-
-        #region Methods
 
         /// <summary>
         /// Returns a value from the dictionary based on the key
@@ -64,12 +53,6 @@ namespace Penguin.DependencyInjection.Objects
             }
         }
 
-        #endregion Methods
-
-        #region Fields
-
         private Func<TKey, TValue> loadMe;
-
-        #endregion Fields
     }
 }

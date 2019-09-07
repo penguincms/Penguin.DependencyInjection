@@ -9,10 +9,8 @@ namespace Penguin.DependencyInjection.Objects
     /// <typeparam name="T">The type of object to provide when accessed</typeparam>
     public class LazyObject<T> : LazyBase<T> where T : class
     {
-        #region Properties
-
         /// <summary>
-        /// Returns an object from the provided factory/provider 
+        /// Returns an object from the provided factory/provider
         /// </summary>
         public virtual T Value
         {
@@ -26,10 +24,6 @@ namespace Penguin.DependencyInjection.Objects
                 return this._value;
             }
         }
-
-        #endregion Properties
-
-        #region Constructors
 
         /// <summary>
         /// Constructs a new instance of this object using the Func as the data source
@@ -48,8 +42,6 @@ namespace Penguin.DependencyInjection.Objects
         {
             this.LoadMe = new Func<T>(() => { return ServiceProvider.GetService<T>(); });
         }
-
-        #endregion Constructors
 
         internal virtual T _value { get; set; }
 

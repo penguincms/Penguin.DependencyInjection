@@ -53,7 +53,7 @@
           "lib/netstandard2.0/Penguin.DependencyInjection.Abstractions.dll": {}
         }
       },
-      "Penguin.Reflection/3.13.5": {
+      "Penguin.Reflection/3.14.0": {
         "type": "package",
         "dependencies": {
           "Penguin.Debugging": "1.0.3",
@@ -300,16 +300,17 @@
         "penguin.dependencyinjection.abstractions.nuspec"
       ]
     },
-    "Penguin.Reflection/3.13.5": {
-      "sha512": "/XpPTftEF+1Dmhur9GA2kCaAka1VCBTLN5y/r4C39Fxp1RRusx8DEkT2m/nQ82mInGVmXRxP121sYBlu2vITtA==",
+    "Penguin.Reflection/3.14.0": {
+      "sha512": "8+Rf16nt5DHTblZfZ3M4VMWFUgg0lIa1B9XKeGmjgXzgyAO57DIOBYAc5G1GzKX7DxCOyjCe884N/bs4lj+kkg==",
       "type": "package",
-      "path": "penguin.reflection/3.13.5",
+      "path": "penguin.reflection/3.14.0",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "License.txt",
         "lib/netstandard2.0/Penguin.Reflection.dll",
         "lib/netstandard2.0/Penguin.Reflection.xml",
-        "penguin.reflection.3.13.5.nupkg.sha512",
+        "penguin.reflection.3.14.0.nupkg.sha512",
         "penguin.reflection.nuspec"
       ]
     },
@@ -371,7 +372,7 @@
       "Microsoft.Extensions.DependencyInjection.Abstractions >= 2.2.0",
       "NETStandard.Library >= 2.0.3",
       "Penguin.DependencyInjection.Abstractions >= 1.0.5",
-      "Penguin.Reflection >= 3.13.5",
+      "Penguin.Reflection >= 3.14.0",
       "Penguin.Reflection.Serialization >= 2.0.10"
     ]
   },
@@ -380,7 +381,7 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
-    "version": "2.2.1",
+    "version": "2.2.2",
     "restore": {
       "projectUniqueName": "C:\\Users\\Loffr\\Documents\\GitHub\\Penguin.DependencyInjection\\Penguin.DependencyInjection.csproj",
       "projectName": "Penguin.DependencyInjection",
@@ -433,7 +434,7 @@
           },
           "Penguin.Reflection": {
             "target": "Package",
-            "version": "[3.13.5, )"
+            "version": "[3.14.0, )"
           },
           "Penguin.Reflection.Serialization": {
             "target": "Package",

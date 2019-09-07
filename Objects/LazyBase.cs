@@ -8,8 +8,6 @@ namespace Penguin.DependencyInjection.Objects
     /// <typeparam name="T">Any type to return</typeparam>
     public abstract class LazyBase<T> where T : class
     {
-        #region Constructors
-
         /// <summary>
         /// Constructs a new instance of this base class
         /// </summary>
@@ -19,12 +17,6 @@ namespace Penguin.DependencyInjection.Objects
             ServiceProvider = serviceProvider;
         }
 
-        #endregion Constructors
-
-        #region Properties
-
         internal IServiceProvider ServiceProvider { get; set; }
-
-        #endregion Properties
     }
 }

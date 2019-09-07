@@ -6,8 +6,6 @@ namespace Penguin.DependencyInjection
 {
     public partial class Engine
     {
-        #region Methods
-
         /// <summary>
         /// Attempts to resolve a service using registrations
         /// </summary>
@@ -28,7 +26,7 @@ namespace Penguin.DependencyInjection
         public object Resolve(Type t) => Engine.Resolve(t, new ResolutionPackage(AllProviders));
 
         /// <summary>
-        /// Attempts to resolve a service using registrations 
+        /// Attempts to resolve a service using registrations
         /// </summary>
         /// <typeparam name="T">The type of class being requested</typeparam>
         /// <returns>The registered or constructed instance of the class, or null, or error</returns>
@@ -54,7 +52,5 @@ namespace Penguin.DependencyInjection
         /// <param name="t">The type of class being requested</param>
         /// <returns>The registered or constructed instances of the class, or null, or error</returns>
         public object ResolveSingle(Type t) => Engine.ResolveSingle(t, new ResolutionPackage(AllProviders));
-
-        #endregion Methods
     }
 }

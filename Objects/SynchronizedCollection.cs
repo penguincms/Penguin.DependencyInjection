@@ -10,8 +10,6 @@ namespace Penguin.DependencyInjection.Objects
     /// <typeparam name="T">Any collection type</typeparam>
     public class SynchronizedCollection<T> : IEnumerable<T>
     {
-        #region Constructors
-
         /// <summary>
         /// Constucts a new instance of this class
         /// </summary>
@@ -20,10 +18,6 @@ namespace Penguin.DependencyInjection.Objects
             _backing = new List<T>();
             ListLock = new object();
         }
-
-        #endregion Constructors
-
-        #region Methods
 
         /// <summary>
         /// Adds a new object to this collection
@@ -38,10 +32,20 @@ namespace Penguin.DependencyInjection.Objects
         }
 
         /// <summary>
-        /// Returns a thread safe enumerator 
+        /// Returns a thread safe enumerator
         /// </summary>
         /// <returns>A thread safe enumerator</returns>
         public IEnumerator<T> GetEnumerator()
+        {
+            IEnumerator<T> enumerator;
+            lock (ListLock)
+            {
+                enumerator = _backing.ToList().GetEnumerator();
+            }
+            return enumerator;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
         {
             IEnumerator<T> enumerator;
             lock (ListLock)
@@ -63,27 +67,11 @@ namespace Penguin.DependencyInjection.Objects
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            IEnumerator<T> enumerator;
-            lock (ListLock)
-            {
-                enumerator = _backing.ToList().GetEnumerator();
-            }
-            return enumerator;
-        }
-
-        #endregion Methods
-
-        #region Properties
-
         /// <summary>
         /// The backing object for this collection
         /// </summary>
         protected List<T> _backing { get; set; }
 
         private object ListLock { get; set; }
-
-        #endregion Properties
     }
 }

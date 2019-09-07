@@ -8,7 +8,6 @@ namespace Penguin.DependencyInjection.ServiceProviders
     /// </summary>
     public class TransientServiceProvider : StaticServiceProvider
     {
-        #region Methods
         /// <summary>
         /// Not used
         /// </summary>
@@ -27,7 +26,5 @@ namespace Penguin.DependencyInjection.ServiceProviders
         {
             return new List<object>();
         }
-
-        #endregion Methods
     }
 }

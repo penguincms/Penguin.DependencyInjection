@@ -10,8 +10,6 @@ namespace Penguin.DependencyInjection.Objects
     /// </summary>
     public class ResolutionPackage
     {
-        #region Properties
-
         /// <summary>
         /// A registration stack optionally used to detect circular references
         /// </summary>
@@ -22,10 +20,6 @@ namespace Penguin.DependencyInjection.Objects
         /// </summary>
         public IDictionary<Type, AbstractServiceProvider> ServiceProviders { get; set; }
 
-        #endregion Properties
-
-        #region Constructors
-
         /// <summary>
         /// Constructs a new instance of the resolution package
         /// </summary>
@@ -34,10 +28,6 @@ namespace Penguin.DependencyInjection.Objects
         {
             ServiceProviders = serviceProviders;
         }
-
-        #endregion Constructors
-
-        #region Methods
 
         internal void AddStack(Registration match)
         {
@@ -67,7 +57,5 @@ namespace Penguin.DependencyInjection.Objects
                 RegistrationStack.Pop();
             }
         }
-
-        #endregion Methods
     }
 }

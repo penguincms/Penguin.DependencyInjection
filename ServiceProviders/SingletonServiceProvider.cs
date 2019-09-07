@@ -9,16 +9,10 @@ namespace Penguin.DependencyInjection.ServiceProviders
     /// </summary>
     public class SingletonServiceProvider : StaticServiceProvider
     {
-        #region Properties
-
         /// <summary>
         /// A static list of the current instances held by this provider
         /// </summary>
         public static ConcurrentDictionary<Type, List<object>> Instances { get; set; } = new ConcurrentDictionary<Type, List<object>>();
-
-        #endregion Properties
-
-        #region Methods
 
         /// <summary>
         /// Add a new instance to the provider
@@ -27,12 +21,14 @@ namespace Penguin.DependencyInjection.ServiceProviders
         /// <param name="o">The actual instance</param>
         public override void Add(Type t, object o)
         {
-            if (!Instances.ContainsKey(t))
+            if (Instances.TryGetValue(t, out List<object> instances))
             {
-                Instances.TryAdd(t, new List<object>());
+                instances.Add(o);
             }
-
-            Instances[t].Add(o);
+            else
+            {
+                Instances.TryAdd(t, new List<object>() { o });
+            }
         }
 
         /// <summary>
@@ -42,9 +38,7 @@ namespace Penguin.DependencyInjection.ServiceProviders
         /// <returns>The object registered to that type</returns>
         public override object GetService(Type t)
         {
-            return Instances.ContainsKey(t) ? Instances[t] : new List<object>();
+            return Instances.TryGetValue(t, out List<object> instances) ? instances : new List<object>();
         }
-
-        #endregion Methods
     }
 }

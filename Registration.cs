@@ -8,8 +8,6 @@ namespace Penguin.DependencyInjection
     /// </summary>
     public class Registration
     {
-        #region Properties
-
         /// <summary>
         /// A Func to be used when creating the instance
         /// </summary>
@@ -30,12 +28,9 @@ namespace Penguin.DependencyInjection
         /// </summary>
         public Type ToInstantiate { get { return _ToInstantiate ?? _RegisteredType; } set { _ToInstantiate = value; } }
 
-
         private Func<IServiceProvider, object> _InjectionFactory { get; set; }
         private Type _RegisteredType { get; set; }
         private Type _ServiceProvider { get; set; }
         private Type _ToInstantiate { get; set; }
-
-        #endregion Properties
     }
 }

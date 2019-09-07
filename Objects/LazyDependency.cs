@@ -9,8 +9,6 @@ namespace Penguin.DependencyInjection.Objects
     /// <typeparam name="T">The type of the dependency to return</typeparam>
     public class LazyDependency<T> : LazyBase<T> where T : class
     {
-        #region Properties
-
         /// <summary>
         /// Returns a constructed instance of the dependency
         /// </summary>
@@ -34,10 +32,6 @@ namespace Penguin.DependencyInjection.Objects
             }
         }
 
-        #endregion Properties
-
-        #region Constructors
-
         /// <summary>
         /// Constructs a new instance of this object
         /// </summary>
@@ -45,8 +39,6 @@ namespace Penguin.DependencyInjection.Objects
         public LazyDependency(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
-
-        #endregion Constructors
 
         private T _Value { get; set; }
 

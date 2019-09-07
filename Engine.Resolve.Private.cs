@@ -13,31 +13,22 @@ namespace Penguin.DependencyInjection
     /// </summary>
     public partial class Engine
     {
-        #region Methods
-
         private static IEnumerable<object> Resolve(Registration match, ResolutionPackage resolutionPackage, bool optional = false)
         {
             resolutionPackage.AddStack(match);
 
-            IList<object> toReturn = null;
-
             //We resolve with that registration. Or attempt to
             AbstractServiceProvider thisManager = null;
 
-            if (resolutionPackage.ServiceProviders.ContainsKey(match.ServiceProvider))
+            if (!resolutionPackage.ServiceProviders.TryGetValue(match.ServiceProvider, out thisManager))
             {
-                thisManager = resolutionPackage.ServiceProviders[match.ServiceProvider];
-            }
-            //Anything where the service provider is not registered, is a singleton
-            //This should only effect scoped providers when they're out of scope.
-            else if (match.ServiceProvider != null)
-            {
+                //Anything where the service provider is not registered, is a singleton
+                //This should only effect scoped providers when they're out of scope.
                 thisManager = new SingletonServiceProvider();
             }
 
-            toReturn = thisManager.GetService(match.ToInstantiate) as IList<object>;
             //If no registration was found, or there was no instance existing
-            if (toReturn is null || !toReturn.Any())
+            if (!(thisManager.GetService(match.ToInstantiate) is IList<object> toReturn) || !toReturn.Any())
             {
                 //Create an instance
                 toReturn = new List<object>();
@@ -64,8 +55,6 @@ namespace Penguin.DependencyInjection
             {
                 return null;
             }
-
-            string name = t.Name;
 
             Type collectionType = t.GetCollectionType();
             Type listType = null;
@@ -133,7 +122,5 @@ namespace Penguin.DependencyInjection
 
             return null;
         }
-
-        #endregion Methods
     }
 }

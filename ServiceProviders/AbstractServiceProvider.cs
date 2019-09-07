@@ -7,8 +7,6 @@ namespace Penguin.DependencyInjection.ServiceProviders
     /// </summary>
     public abstract class AbstractServiceProvider : IServiceProvider
     {
-        #region Methods
-
         /// <summary>
         /// Adds an instance of the type to this container, using the specified type as the key
         /// </summary>
@@ -31,7 +29,5 @@ namespace Penguin.DependencyInjection.ServiceProviders
         /// <param name="t">The type to use as the Key</param>
         /// <returns>A List of objects (as an object) that match the Key. Cast the list to access the contents</returns>
         public abstract object GetService(Type t);
-
-        #endregion Methods
     }
 }

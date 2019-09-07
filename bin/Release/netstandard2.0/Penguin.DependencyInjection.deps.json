@@ -1,18 +1,18 @@
 {
   "runtimeTarget": {
     "name": ".NETStandard,Version=v2.0/",
-    "signature": "d5c70e2411abfa2cd3db945f4aa9f44828932393"
+    "signature": "e0d5b8db2ee79d9f60888a6ed2e40b473440c0d3"
   },
   "compilationOptions": {},
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
-      "Penguin.DependencyInjection/2.2.1": {
+      "Penguin.DependencyInjection/2.2.2": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "2.2.0",
           "NETStandard.Library": "2.0.3",
           "Penguin.DependencyInjection.Abstractions": "1.0.5",
-          "Penguin.Reflection": "3.13.5",
+          "Penguin.Reflection": "3.14.0",
           "Penguin.Reflection.Serialization": "2.0.10"
         },
         "runtime": {
@@ -49,15 +49,15 @@
           }
         }
       },
-      "Penguin.Reflection/3.13.5": {
+      "Penguin.Reflection/3.14.0": {
         "dependencies": {
           "Penguin.Debugging": "1.0.3",
           "Penguin.Reflection.Abstractions": "2.0.6"
         },
         "runtime": {
           "lib/netstandard2.0/Penguin.Reflection.dll": {
-            "assemblyVersion": "3.13.5.0",
-            "fileVersion": "3.13.5.0"
+            "assemblyVersion": "3.14.0.0",
+            "fileVersion": "3.14.0.0"
           }
         }
       },
@@ -95,7 +95,7 @@
       },
       "Penguin.Reflection.Serialization.Abstractions/2.0.8": {
         "dependencies": {
-          "Penguin.Reflection": "3.13.5",
+          "Penguin.Reflection": "3.14.0",
           "Penguin.Reflection.Abstractions": "2.0.6",
           "Penguin.Reflection.Extensions": "2.0.6"
         },
@@ -109,7 +109,7 @@
     }
   },
   "libraries": {
-    "Penguin.DependencyInjection/2.2.1": {
+    "Penguin.DependencyInjection/2.2.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -149,12 +149,12 @@
       "path": "penguin.dependencyinjection.abstractions/1.0.5",
       "hashPath": "penguin.dependencyinjection.abstractions.1.0.5.nupkg.sha512"
     },
-    "Penguin.Reflection/3.13.5": {
+    "Penguin.Reflection/3.14.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-/XpPTftEF+1Dmhur9GA2kCaAka1VCBTLN5y/r4C39Fxp1RRusx8DEkT2m/nQ82mInGVmXRxP121sYBlu2vITtA==",
-      "path": "penguin.reflection/3.13.5",
-      "hashPath": "penguin.reflection.3.13.5.nupkg.sha512"
+      "sha512": "sha512-8+Rf16nt5DHTblZfZ3M4VMWFUgg0lIa1B9XKeGmjgXzgyAO57DIOBYAc5G1GzKX7DxCOyjCe884N/bs4lj+kkg==",
+      "path": "penguin.reflection/3.14.0",
+      "hashPath": "penguin.reflection.3.14.0.nupkg.sha512"
     },
     "Penguin.Reflection.Abstractions/2.0.6": {
       "type": "package",

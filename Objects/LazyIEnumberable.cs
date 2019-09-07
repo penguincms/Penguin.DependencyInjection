@@ -9,8 +9,6 @@ namespace Penguin.DependencyInjection.Objects
     /// <typeparam name="T">Any type</typeparam>
     public class LazyIEnumerable<T> where T : class
     {
-        #region Constructors
-
         /// <summary>
         /// Constructs a new instance of this object
         /// </summary>
@@ -19,10 +17,6 @@ namespace Penguin.DependencyInjection.Objects
         {
             this.LoadMe = loadingMethod;
         }
-
-        #endregion Constructors
-
-        #region Properties
 
         internal virtual IEnumerable<T> _backingObject { get; set; }
 
@@ -40,7 +34,5 @@ namespace Penguin.DependencyInjection.Objects
         }
 
         internal virtual Func<IEnumerable<T>> LoadMe { get; set; }
-
-        #endregion Properties
     }
 }

@@ -7,8 +7,6 @@ namespace Penguin.DependencyInjection
 {
     public partial class Engine
     {
-        #region Methods
-
         /// <summary>
         /// Checks if theres an existing registration for this type
         /// </summary>
@@ -82,7 +80,6 @@ namespace Penguin.DependencyInjection
         /// <typeparam name="Parent">The least derived type in the stack</typeparam>
         /// <param name="lifetimeManager">The type of the ServiceProvider to use for resolution</param>
         public static void RegisterAllBaseTypes<Base, Parent>(Type lifetimeManager = null) where Parent : Base => Engine.RegisterAllBaseTypes(typeof(Base), typeof(Parent), lifetimeManager);
-
 
         /// <summary>
         /// Registers a concrete object instance to the given provider
@@ -158,7 +155,8 @@ namespace Penguin.DependencyInjection
 
         internal static void AddRegistration(Registration dr)
         {
-            if (StaticLogger.Level != StaticLogger.LoggingLevel.None) {
+            if (StaticLogger.Level != StaticLogger.LoggingLevel.None)
+            {
                 StaticLogger.Log($"DI: Registering {dr.RegisteredType.FullName} => { dr.ToInstantiate.FullName} ({dr.ServiceProvider.Name})", StaticLogger.LoggingLevel.Call);
             }
 
@@ -171,7 +169,5 @@ namespace Penguin.DependencyInjection
 
             return;
         }
-
-        #endregion Methods
     }
 }

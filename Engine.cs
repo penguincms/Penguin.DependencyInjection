@@ -1,4 +1,5 @@
-﻿using Penguin.DependencyInjection.Abstractions;
+﻿using Penguin.Debugging;
+using Penguin.DependencyInjection.Abstractions;
 using Penguin.DependencyInjection.Attributes;
 using Penguin.DependencyInjection.Exceptions;
 using Penguin.DependencyInjection.Objects;
@@ -9,26 +10,18 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Penguin.Debugging;
 
 namespace Penguin.DependencyInjection
 {
     public partial class Engine : IServiceProvider
     {
-        #region Properties
-
         /// <summary>
         /// If true, maintains a resolution stack to attempt to prevent a stack overflow. Likely incurs a performance penalty. Useful for debugging. Default false.
         /// </summary>
         public static bool DetectCircularResolution { get; set; } = false;
-
-        #endregion Properties
-
-        #region Constructors
 
         /// <summary>
         /// Whitelists a list of assemblies through the Reflection TypeFactory and then grabs all types and attempts to register any types that are relevant to the
@@ -43,7 +36,6 @@ namespace Penguin.DependencyInjection
 
             foreach (Type t in TypeFactory.GetAllTypes())
             {
-
                 try
                 {
                     if (t.IsAbstract || t.IsInterface)
@@ -98,10 +90,6 @@ namespace Penguin.DependencyInjection
             }
         }
 
-        #endregion Constructors
-
-        #region Methods
-
         /// <summary>
         /// Creates a clone of the current registrations and returns it.
         /// </summary>
@@ -131,6 +119,14 @@ namespace Penguin.DependencyInjection
         /// <param name="t">The type to check for</param>
         /// <returns>Whether or not the type is registered as an injection target</returns>
         public static bool IsRegistered(Type t) => Registrations.ContainsKey(t);
+
+        /// <summary>
+        /// Try-Gets a list of registrations from the registration collection
+        /// </summary>
+        /// <param name="t">The type to check for</param>
+        /// <param name="outT">If found, the return collection</param>
+        /// <returns>Whether or not the type is registered as an injection target</returns>
+        public static bool IsRegistered(Type t, out SynchronizedCollection<Registration> outT) => Registrations.TryGetValue(t, out outT);
 
         /// <summary>
         /// Resolves child properties of an object through the engine
@@ -193,8 +189,6 @@ namespace Penguin.DependencyInjection
             AllProviders.Add(serviceProvider.GetType(), serviceProvider);
         }
 
-        #endregion Methods
-
         internal static ConcurrentDictionary<Type, List<PropertyInfo>> ChildDependancies { get; set; }
         internal static ConcurrentDictionary<Type, SynchronizedCollection<Registration>> Registrations { get; set; }
         internal static IDictionary<Type, AbstractServiceProvider> StaticProviders { get; set; } = new ConcurrentDictionary<Type, AbstractServiceProvider>();
@@ -203,7 +197,7 @@ namespace Penguin.DependencyInjection
 
         internal static bool AnyRegistration(Type t)
         {
-            return ResolveType(t).ToList().Any();
+            return ResolveType(t).Any();
         }
 
         internal static object CreateRegisteredInstance(Registration registration, ResolutionPackage resolutionPackage, bool optional = false)
@@ -281,20 +275,20 @@ namespace Penguin.DependencyInjection
                 }
             }
 
-            StringBuilder registered = new StringBuilder();
-
-            foreach (KeyValuePair<Type, SynchronizedCollection<Registration>> r in Engine.Registrations)
-            {
-                registered.Append(r.Key.Name + System.Environment.NewLine);
-
-                foreach (Registration thisRegistration in r.Value)
-                {
-                    registered.Append($"\t{thisRegistration.RegisteredType.FullName} => {thisRegistration.ToInstantiate.FullName} as {thisRegistration.ServiceProvider.FullName}");
-                }
-            }
-
             if (!optional)
             {
+                StringBuilder registered = new StringBuilder();
+
+                foreach (KeyValuePair<Type, SynchronizedCollection<Registration>> r in Engine.Registrations)
+                {
+                    registered.Append(r.Key.Name + System.Environment.NewLine);
+
+                    foreach (Registration thisRegistration in r.Value)
+                    {
+                        registered.Append($"\t{thisRegistration.RegisteredType.FullName} => {thisRegistration.ToInstantiate.FullName} as {thisRegistration.ServiceProvider.FullName}");
+                    }
+                }
+
                 MissingInjectableConstructorException exception = new MissingInjectableConstructorException(registration.ToInstantiate);
 
                 string DebugText = registered.ToString();
@@ -303,10 +297,11 @@ namespace Penguin.DependencyInjection
 
                 foreach (ConstructorInfo constructor in Constructors)
                 {
-                    FailingConstructor failingConstructor = new FailingConstructor();
-
-                    failingConstructor.Constructor = constructor;
-                    failingConstructor.MissingParameters = constructor.GetParameters().Where(t => !IsRegistered(t.ParameterType)).ToArray();
+                    FailingConstructor failingConstructor = new FailingConstructor
+                    {
+                        Constructor = constructor,
+                        MissingParameters = constructor.GetParameters().Where(t => !IsRegistered(t.ParameterType)).ToArray()
+                    };
 
                     Error += System.Environment.NewLine + string.Join(", ", constructor.GetParameters().Select(s => $"{s.ParameterType.FullName} {s.Name}"));
                     Error += System.Environment.NewLine + "Missing registrations: " + string.Join(", ", failingConstructor.MissingParameters.Select(s => $"{s.ParameterType.FullName} {s.Name}"));
@@ -360,17 +355,16 @@ namespace Penguin.DependencyInjection
 
         internal static SynchronizedCollection<Registration> ResolveType(Type t)
         {   //Switch this to use CoreType and GetCollectionType so it handles arrays
-            SynchronizedCollection<Registration> match = new SynchronizedCollection<Registration>();
+            SynchronizedCollection<Registration> match;
 
-            if (IsRegistered(t))
+            if (!IsRegistered(t, out match))
             {
-                match = Registrations[t];
+                match = new SynchronizedCollection<Registration>(); ;
             }
 
-            if (t.IsGenericType && IsRegistered(t.GetGenericTypeDefinition()))
+            Type genericTypeDefinition = t.GetGenericTypeDefinition();
+            if (t.IsGenericType && IsRegistered(genericTypeDefinition, out SynchronizedCollection<Registration> genericMatchList))
             {
-                SynchronizedCollection<Registration> genericMatchList = Registrations[t.GetGenericTypeDefinition()];
-
                 foreach (Registration genericMatch in genericMatchList)
                 {
                     if (genericMatch.ToInstantiate.IsGenericType)

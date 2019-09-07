@@ -9,7 +9,6 @@ namespace Penguin.DependencyInjection.Exceptions
     /// </summary>
     public class FailingConstructor
     {
-        #region Properties
         /// <summary>
         /// The constructor info for this constructor instance
         /// </summary>
@@ -19,8 +18,6 @@ namespace Penguin.DependencyInjection.Exceptions
         /// The constructor parameters that were not found registered in the dependency injector
         /// </summary>
         public ParameterInfo[] MissingParameters { get; set; }
-
-        #endregion Properties
     }
 
     /// <summary>
@@ -28,7 +25,6 @@ namespace Penguin.DependencyInjection.Exceptions
     /// </summary>
     public class MissingInjectableConstructorException : Exception
     {
-        #region Properties
         /// <summary>
         /// Information for each constructor that was tried, and what it was missing
         /// </summary>
@@ -44,18 +40,11 @@ namespace Penguin.DependencyInjection.Exceptions
         /// </summary>
         public override string Message { get { return _message; } }
 
-        #endregion Properties
-
-        #region Constructors
-
-
         internal MissingInjectableConstructorException(Type failingType)
         {
             FailingType = failingType;
             FailedConstructors = new List<FailingConstructor>();
         }
-
-        #endregion Constructors
 
         internal string _message { get; set; }
 

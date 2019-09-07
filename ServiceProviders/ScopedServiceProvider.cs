@@ -8,8 +8,6 @@ namespace Penguin.DependencyInjection.ServiceProviders
     /// </summary>
     public class ScopedServiceProvider : AbstractServiceProvider
     {
-        #region Methods
-
         /// <summary>
         /// Adds a new object instance to the provided type registrations list of instances
         /// </summary>
@@ -17,12 +15,14 @@ namespace Penguin.DependencyInjection.ServiceProviders
         /// <param name="o">The object instance to add</param>
         public override void Add(Type t, object o)
         {
-            if (!Instances.ContainsKey(t))
+            if (Instances.TryGetValue(t, out List<object> instances))
             {
-                Instances.Add(t, new List<object>());
+                instances.Add(o);
             }
-
-            Instances[t].Add(o);
+            else
+            {
+                Instances.Add(t, new List<object>() { o });
+            }
         }
 
         /// <summary>
@@ -32,18 +32,12 @@ namespace Penguin.DependencyInjection.ServiceProviders
         /// <returns>A LIST of object instances that are part of the type registration</returns>
         public override object GetService(Type t)
         {
-            return Instances.ContainsKey(t) ? Instances[t] : new List<object>();
+            return Instances.TryGetValue(t, out List<object> instances) ? instances : new List<object>();
         }
-
-        #endregion Methods
-
-        #region Properties
 
         /// <summary>
         /// A list of all the objects that were constructed in the scope containing this service provider (set to be scoped)
         /// </summary>
         protected Dictionary<Type, List<object>> Instances { get; set; } = new Dictionary<Type, List<object>>();
-
-        #endregion Properties
     }
 }

@@ -8,16 +8,10 @@ namespace Penguin.DependencyInjection.ServiceScopes
     /// </summary>
     public class StaticServiceScope : IServiceScope
     {
-        #region Properties
-
         /// <summary>
         /// Unused
         /// </summary>
         public IServiceProvider ServiceProvider { get; set; }
-
-        #endregion Properties
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of this service scope.
@@ -32,18 +26,12 @@ namespace Penguin.DependencyInjection.ServiceScopes
             ServiceProvider = Engine;
         }
 
-        #endregion Constructors
-
-        #region Methods
-
         /// <summary>
         /// Unused
         /// </summary>
         public void Dispose()
         {
         }
-
-        #endregion Methods
 
         private static Engine Engine { get; set; }
     }

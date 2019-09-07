@@ -81,6 +81,14 @@
             <param name="t">The type to check for</param>
             <returns>Whether or not the type is registered as an injection target</returns>
         </member>
+        <member name="M:Penguin.DependencyInjection.Engine.IsRegistered(System.Type,Penguin.DependencyInjection.Objects.SynchronizedCollection{Penguin.DependencyInjection.Registration}@)">
+            <summary>
+            Try-Gets a list of registrations from the registration collection
+            </summary>
+            <param name="t">The type to check for</param>
+            <param name="outT">If found, the return collection</param>
+            <returns>Whether or not the type is registered as an injection target</returns>
+        </member>
         <member name="M:Penguin.DependencyInjection.Engine.ResolveProperties``1(``0,Penguin.DependencyInjection.Objects.ResolutionPackage)">
             <summary>
             Resolves child properties of an object through the engine
@@ -224,7 +232,7 @@
         </member>
         <member name="M:Penguin.DependencyInjection.Engine.Resolve``1">
             <summary>
-            Attempts to resolve a service using registrations 
+            Attempts to resolve a service using registrations
             </summary>
             <typeparam name="T">The type of class being requested</typeparam>
             <returns>The registered or constructed instance of the class, or null, or error</returns>
@@ -429,7 +437,7 @@
         </member>
         <member name="P:Penguin.DependencyInjection.Objects.LazyObject`1.Value">
             <summary>
-            Returns an object from the provided factory/provider 
+            Returns an object from the provided factory/provider
             </summary>
         </member>
         <member name="M:Penguin.DependencyInjection.Objects.LazyObject`1.#ctor(System.Func{`0})">
@@ -484,7 +492,7 @@
         </member>
         <member name="M:Penguin.DependencyInjection.Objects.SynchronizedCollection`1.GetEnumerator">
             <summary>
-            Returns a thread safe enumerator 
+            Returns a thread safe enumerator
             </summary>
             <returns>A thread safe enumerator</returns>
         </member>
@@ -600,7 +608,7 @@
         <member name="T:Penguin.DependencyInjection.ServiceProviders.StaticServiceProvider">
             <summary>
             A base class for any service providers that should be registered as static instances with the dependency injector,
-            since it makes no sense to force registrations at construction for providers backed by static fields. 
+            since it makes no sense to force registrations at construction for providers backed by static fields.
             </summary>
         </member>
         <member name="M:Penguin.DependencyInjection.ServiceProviders.StaticServiceProvider.Register(Penguin.DependencyInjection.Engine)">

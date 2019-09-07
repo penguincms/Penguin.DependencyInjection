@@ -15,7 +15,7 @@
       <group targetFramework=".NETStandard2.0">
         <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="2.2.0" exclude="Build,Analyzers" />
         <dependency id="Penguin.DependencyInjection.Abstractions" version="1.0.5" exclude="Build,Analyzers" />
-        <dependency id="Penguin.Reflection" version="3.13.5" exclude="Build,Analyzers" />
+        <dependency id="Penguin.Reflection" version="3.14.0" exclude="Build,Analyzers" />
         <dependency id="Penguin.Reflection.Serialization" version="2.0.10" exclude="Build,Analyzers" />
       </group>
     </dependencies>

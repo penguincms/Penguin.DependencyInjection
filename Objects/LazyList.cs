@@ -10,8 +10,6 @@ namespace Penguin.DependencyInjection.Objects
     /// <typeparam name="T">Any type</typeparam>
     public class LazyList<T> : IEnumerable<T>
     {
-        #region Constructors
-
         /// <summary>
         /// Constructs a new instance of this object
         /// </summary>
@@ -21,10 +19,6 @@ namespace Penguin.DependencyInjection.Objects
             this.LoadMe = loadingMethod;
         }
 
-        #endregion Constructors
-
-        #region Methods
-
         /// <summary>
         /// Returns the underlying enumerator for the list
         /// </summary>
@@ -32,10 +26,6 @@ namespace Penguin.DependencyInjection.Objects
         public IEnumerator<T> GetEnumerator() => this.BackingObject.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => this.BackingObject.GetEnumerator();
-
-        #endregion Methods
-
-        #region Properties
 
         internal virtual List<T> _backingObject { get; set; }
 
@@ -53,7 +43,5 @@ namespace Penguin.DependencyInjection.Objects
         }
 
         internal virtual Func<List<T>> LoadMe { get; set; }
-
-        #endregion Properties
     }
 }
