@@ -362,16 +362,21 @@ namespace Penguin.DependencyInjection
                 match = new SynchronizedCollection<Registration>(); ;
             }
 
-            Type genericTypeDefinition = t.GetGenericTypeDefinition();
-            if (t.IsGenericType && IsRegistered(genericTypeDefinition, out SynchronizedCollection<Registration> genericMatchList))
-            {
-                foreach (Registration genericMatch in genericMatchList)
-                {
-                    if (genericMatch.ToInstantiate.IsGenericType)
-                    {
-                        Type newInstantiation = genericMatch.ToInstantiate.MakeGenericType(t.GenericTypeArguments);
 
-                        match.Add(GenerateRegistration(t, newInstantiation));
+            if (t.IsGenericType)
+            {
+                Type genericTypeDefinition = t.GetGenericTypeDefinition();
+                if (IsRegistered(genericTypeDefinition, out SynchronizedCollection<Registration> genericMatchList))
+                {
+
+                    foreach (Registration genericMatch in genericMatchList)
+                    {
+                        if (genericMatch.ToInstantiate.IsGenericType)
+                        {
+                            Type newInstantiation = genericMatch.ToInstantiate.MakeGenericType(t.GenericTypeArguments);
+
+                            match.Add(GenerateRegistration(t, newInstantiation));
+                        }
                     }
                 }
             }

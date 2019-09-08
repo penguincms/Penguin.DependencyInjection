@@ -7,7 +7,7 @@
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <PackageProjectUrl>http://www.penguinms.com/Nuget</PackageProjectUrl>
 	<PackageIconUrl>http://www.penguinms.com/client/images/pg.png</PackageIconUrl>
-    <Version>2.2.2</Version>
+    <Version>2.2.3</Version>
     <Description>A penguin themed dependency injector fully supporting ASP.Net Core</Description>
   </PropertyGroup>
   
