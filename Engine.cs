@@ -323,7 +323,7 @@ namespace Penguin.DependencyInjection
         {
             if (ResolvableTypes.TryGetValue(t, out bool toReturn))
             {
-                return true;
+                return toReturn;
             }
 
             bool alreadyResolvable = IsValidIEnumerable(t) || ResolveType(t).Any();
