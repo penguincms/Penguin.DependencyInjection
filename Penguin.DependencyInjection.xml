@@ -81,7 +81,7 @@
             <param name="t">The type to check for</param>
             <returns>Whether or not the type is registered as an injection target</returns>
         </member>
-        <member name="M:Penguin.DependencyInjection.Engine.IsRegistered(System.Type,Penguin.DependencyInjection.Objects.SynchronizedCollection{Penguin.DependencyInjection.Registration}@)">
+        <member name="M:Penguin.DependencyInjection.Engine.IsRegistered(System.Type,Penguin.DependencyInjection.Objects.ConcurrentList{Penguin.DependencyInjection.Registration}@)">
             <summary>
             Try-Gets a list of registrations from the registration collection
             </summary>
@@ -343,6 +343,40 @@
             <param name="provider">The service provider to use as a source</param>
             <returns>Any resolved object casted to the requested type</returns>
         </member>
+        <member name="T:Penguin.DependencyInjection.Objects.ConcurrentList`1">
+            <summary>
+            A Concurrent List object
+            </summary>
+            <typeparam name="T">Any collection type</typeparam>
+        </member>
+        <member name="M:Penguin.DependencyInjection.Objects.ConcurrentList`1.#ctor">
+            <summary>
+            Constucts a new instance of this class
+            </summary>
+        </member>
+        <member name="M:Penguin.DependencyInjection.Objects.ConcurrentList`1.Add(`0)">
+            <summary>
+            Adds a new object to this collection
+            </summary>
+            <param name="o">The object to add</param>
+        </member>
+        <member name="M:Penguin.DependencyInjection.Objects.ConcurrentList`1.GetEnumerator">
+            <summary>
+            Returns a thread safe enumerator
+            </summary>
+            <returns>A thread safe enumerator</returns>
+        </member>
+        <member name="M:Penguin.DependencyInjection.Objects.ConcurrentList`1.Remove(`0)">
+            <summary>
+            Removes an object from this list
+            </summary>
+            <param name="o">The object to remove</param>
+        </member>
+        <member name="P:Penguin.DependencyInjection.Objects.ConcurrentList`1._backing">
+            <summary>
+            The backing object for this collection
+            </summary>
+        </member>
         <member name="T:Penguin.DependencyInjection.Objects.LazyBase`1">
             <summary>
             A base class for the various lazy initializers
@@ -472,40 +506,6 @@
             Constructs a new instance of the resolution package
             </summary>
             <param name="serviceProviders"></param>
-        </member>
-        <member name="T:Penguin.DependencyInjection.Objects.SynchronizedCollection`1">
-            <summary>
-            A Concurrent List object
-            </summary>
-            <typeparam name="T">Any collection type</typeparam>
-        </member>
-        <member name="M:Penguin.DependencyInjection.Objects.SynchronizedCollection`1.#ctor">
-            <summary>
-            Constucts a new instance of this class
-            </summary>
-        </member>
-        <member name="M:Penguin.DependencyInjection.Objects.SynchronizedCollection`1.Add(`0)">
-            <summary>
-            Adds a new object to this collection
-            </summary>
-            <param name="o">The object to add</param>
-        </member>
-        <member name="M:Penguin.DependencyInjection.Objects.SynchronizedCollection`1.GetEnumerator">
-            <summary>
-            Returns a thread safe enumerator
-            </summary>
-            <returns>A thread safe enumerator</returns>
-        </member>
-        <member name="M:Penguin.DependencyInjection.Objects.SynchronizedCollection`1.Remove(`0)">
-            <summary>
-            Removes an object from this list
-            </summary>
-            <param name="o">The object to remove</param>
-        </member>
-        <member name="P:Penguin.DependencyInjection.Objects.SynchronizedCollection`1._backing">
-            <summary>
-            The backing object for this collection
-            </summary>
         </member>
         <member name="T:Penguin.DependencyInjection.Registration">
             <summary>

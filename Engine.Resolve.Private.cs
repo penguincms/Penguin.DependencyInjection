@@ -3,6 +3,7 @@ using Penguin.DependencyInjection.ServiceProviders;
 using Penguin.Reflection.Extensions;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -83,9 +84,7 @@ namespace Penguin.DependencyInjection
 
         private static IEnumerable ResolveMany(Type t, ResolutionPackage resolutionPackage)
         {
-            SynchronizedCollection<Registration> matchList = ResolveType(t);
-
-            foreach (Registration match in matchList)
+            foreach (Registration match in ResolveType(t))
             {
                 foreach (object instance in Resolve(match, resolutionPackage))
                 {
@@ -108,9 +107,7 @@ namespace Penguin.DependencyInjection
                 return null;
             }
 
-            List<Registration> matchList = ResolveType(t).ToList();
-
-            foreach (Registration reg in matchList)
+            foreach (Registration reg in ResolveType(t))
             {
                 object toReturn = Resolve(reg, resolutionPackage, optional).LastOrDefault();
 

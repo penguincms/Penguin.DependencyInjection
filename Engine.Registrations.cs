@@ -2,6 +2,7 @@
 using Penguin.DependencyInjection.Objects;
 using Penguin.DependencyInjection.ServiceProviders;
 using System;
+using System.Collections.Concurrent;
 
 namespace Penguin.DependencyInjection
 {
@@ -126,14 +127,18 @@ namespace Penguin.DependencyInjection
         /// </summary>
         /// <param name="t">The type to remove</param>
         /// <returns>Whether or not the unregistration was a success</returns>
-        public static bool Unregister(Type t) => Engine.Registrations.TryRemove(t, out SynchronizedCollection<Registration> _);
+        public static bool Unregister(Type t)
+        {
+            ResolvableTypes.TryRemove(t, out _);
+            return Engine.Registrations.TryRemove(t, out ConcurrentList<Registration> _);
+        }
 
         /// <summary>
         /// Registers a concrete object instance to the given provider
         /// </summary>
         /// <typeparam name="T">The type to remove</typeparam>
         /// <returns>Whether or not the unregistration was a success</returns>
-        public static bool Unregister<T>() => Engine.Registrations.TryRemove(typeof(T), out SynchronizedCollection<Registration> _);
+        public static bool Unregister<T>() => Unregister(typeof(T));
 
         /// <summary>
         /// Registers all parent types of the given object to the specified instance
@@ -160,12 +165,15 @@ namespace Penguin.DependencyInjection
                 StaticLogger.Log($"DI: Registering {dr.RegisteredType.FullName} => { dr.ToInstantiate.FullName} ({dr.ServiceProvider.Name})", StaticLogger.LoggingLevel.Call);
             }
 
-            if (!Registrations.ContainsKey(dr.RegisteredType))
+            if (!Registrations.TryGetValue(dr.RegisteredType, out ConcurrentList<Registration> registrations))
             {
-                Registrations.TryAdd(dr.RegisteredType, new SynchronizedCollection<Registration>());
+                registrations = new ConcurrentList<Registration>();
+                Registrations.TryAdd(dr.RegisteredType, registrations);
             }
 
-            Registrations[dr.RegisteredType].Add(dr);
+            ResolvableTypes.TryRemove(dr.RegisteredType, out _);
+
+            registrations.Add(dr);
 
             return;
         }

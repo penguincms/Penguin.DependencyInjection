@@ -32,7 +32,7 @@ namespace Penguin.DependencyInjection
             StaticLogger.Log($"Penguin.DependencyInjection: {Assembly.GetExecutingAssembly().GetName().Version}", StaticLogger.LoggingLevel.Call);
 
             ChildDependancies = new ConcurrentDictionary<Type, List<PropertyInfo>>();
-            Registrations = new ConcurrentDictionary<Type, SynchronizedCollection<Registration>>();
+            Registrations = new ConcurrentDictionary<Type, ConcurrentList<Registration>>();
 
             foreach (Type t in TypeFactory.GetAllTypes())
             {
@@ -94,13 +94,13 @@ namespace Penguin.DependencyInjection
         /// Creates a clone of the current registrations and returns it.
         /// </summary>
         /// <returns>A clone of the current registrations</returns>
-        public static ConcurrentDictionary<Type, SynchronizedCollection<Registration>> GetRegistrations()
+        public static ConcurrentDictionary<Type, ConcurrentList<Registration>> GetRegistrations()
         {
-            ConcurrentDictionary<Type, SynchronizedCollection<Registration>> toReturn = new ConcurrentDictionary<Type, SynchronizedCollection<Registration>>();
+            ConcurrentDictionary<Type, ConcurrentList<Registration>> toReturn = new ConcurrentDictionary<Type, ConcurrentList<Registration>>();
 
-            foreach (KeyValuePair<Type, SynchronizedCollection<Registration>> keyValuePair in Registrations)
+            foreach (KeyValuePair<Type, ConcurrentList<Registration>> keyValuePair in Registrations)
             {
-                SynchronizedCollection<Registration> list = new SynchronizedCollection<Registration>();
+                ConcurrentList<Registration> list = new ConcurrentList<Registration>();
 
                 foreach (Registration r in keyValuePair.Value)
                 {
@@ -126,7 +126,7 @@ namespace Penguin.DependencyInjection
         /// <param name="t">The type to check for</param>
         /// <param name="outT">If found, the return collection</param>
         /// <returns>Whether or not the type is registered as an injection target</returns>
-        public static bool IsRegistered(Type t, out SynchronizedCollection<Registration> outT) => Registrations.TryGetValue(t, out outT);
+        public static bool IsRegistered(Type t, out ConcurrentList<Registration> outT) => Registrations.TryGetValue(t, out outT);
 
         /// <summary>
         /// Resolves child properties of an object through the engine
@@ -190,7 +190,7 @@ namespace Penguin.DependencyInjection
         }
 
         internal static ConcurrentDictionary<Type, List<PropertyInfo>> ChildDependancies { get; set; }
-        internal static ConcurrentDictionary<Type, SynchronizedCollection<Registration>> Registrations { get; set; }
+        internal static ConcurrentDictionary<Type, ConcurrentList<Registration>> Registrations { get; set; }
         internal static IDictionary<Type, AbstractServiceProvider> StaticProviders { get; set; } = new ConcurrentDictionary<Type, AbstractServiceProvider>();
         internal IDictionary<Type, AbstractServiceProvider> AllProviders { get; set; } = new ConcurrentDictionary<Type, AbstractServiceProvider>();
         internal IDictionary<Type, AbstractServiceProvider> ScopedProviders { get; set; } = new Dictionary<Type, AbstractServiceProvider>();
@@ -279,7 +279,7 @@ namespace Penguin.DependencyInjection
             {
                 StringBuilder registered = new StringBuilder();
 
-                foreach (KeyValuePair<Type, SynchronizedCollection<Registration>> r in Engine.Registrations)
+                foreach (KeyValuePair<Type, ConcurrentList<Registration>> r in Engine.Registrations)
                 {
                     registered.Append(r.Key.Name + System.Environment.NewLine);
 
@@ -317,8 +317,15 @@ namespace Penguin.DependencyInjection
             }
         }
 
+
+        private static ConcurrentDictionary<Type, bool> ResolvableTypes { get; set; } = new ConcurrentDictionary<Type, bool>();
         internal static bool IsResolvable(Type t)
         {
+            if (ResolvableTypes.TryGetValue(t, out bool toReturn))
+            {
+                return true;
+            }
+
             bool alreadyResolvable = IsValidIEnumerable(t) || ResolveType(t).Any();
 
             if (!alreadyResolvable)
@@ -335,17 +342,17 @@ namespace Penguin.DependencyInjection
                     {
                         Register(t, t, typeof(TransientServiceProvider));
                     }
-                    return true;
-                }
-                else
-                {
-                    return false;
+                    toReturn = true;
                 }
             }
             else
             {
-                return true;
+                toReturn = true;
             }
+
+            ResolvableTypes.TryAdd(t, toReturn);
+
+            return toReturn;
         }
 
         internal static bool IsValidIEnumerable(Type t)
@@ -353,20 +360,25 @@ namespace Penguin.DependencyInjection
             return (typeof(IEnumerable).IsAssignableFrom(t) && t != typeof(string));
         }
 
-        internal static SynchronizedCollection<Registration> ResolveType(Type t)
-        {   //Switch this to use CoreType and GetCollectionType so it handles arrays
-            SynchronizedCollection<Registration> match;
-
-            if (!IsRegistered(t, out match))
+        internal static IEnumerable<Registration> ResolveType(Type t)
+        {
+            //Switch this to use CoreType and GetCollectionType so it handles arrays
+            bool digDeeper = true;
+            if (IsRegistered(t, out ConcurrentList<Registration> match))
             {
-                match = new SynchronizedCollection<Registration>(); ;
+                foreach(Registration r in match)
+                {
+                    yield return r;
+                    digDeeper = false;
+                }
             }
 
 
             if (t.IsGenericType)
             {
                 Type genericTypeDefinition = t.GetGenericTypeDefinition();
-                if (IsRegistered(genericTypeDefinition, out SynchronizedCollection<Registration> genericMatchList))
+
+                if (IsRegistered(genericTypeDefinition, out ConcurrentList<Registration> genericMatchList))
                 {
 
                     foreach (Registration genericMatch in genericMatchList)
@@ -375,18 +387,19 @@ namespace Penguin.DependencyInjection
                         {
                             Type newInstantiation = genericMatch.ToInstantiate.MakeGenericType(t.GenericTypeArguments);
 
-                            match.Add(GenerateRegistration(t, newInstantiation));
+                            yield return GenerateRegistration(t, newInstantiation);
+                            digDeeper = false;
                         }
                     }
                 }
             }
 
-            if (!match.Any() && IsValidIEnumerable(t))
+            if (digDeeper && IsValidIEnumerable(t))
             {
-                return ResolveType(t.GetCollectionType());
+                foreach(Registration r in ResolveType(t.GetCollectionType())) {
+                    yield return r;
+                }
             }
-
-            return match;
         }
     }
 }
