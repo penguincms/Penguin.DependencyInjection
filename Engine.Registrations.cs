@@ -64,12 +64,25 @@ namespace Penguin.DependencyInjection
         /// <param name="lifetimeManager">The type of the ServiceProvider to use for resolution</param>
         public static void RegisterAllBaseTypes(Type Base, Type Parent, Type lifetimeManager = null)
         {
+            if (Base is null)
+            {
+                throw new Exception($"Can not register base types with null {nameof(Base)}. Arguments {nameof(Base)}: {Base}, {nameof(Parent)}, {Parent}");
+            }
+
+            if (Parent is null)
+            {
+                throw new Exception($"Can not register base types with null {nameof(Parent)}. Arguments {nameof(Base)}: {Base}, {nameof(Parent)}, {Parent}");
+            }
+
+
             Type BaseType = Parent;
             do
             {
                 Register(BaseType, Parent, null, lifetimeManager);
                 BaseType = BaseType.BaseType;
-            } while (BaseType != Base);
+            } while (Parent.IsInterface ? Parent.IsAssignableFrom(BaseType) : BaseType != Base);
+
+
 
             Register(Base, Parent, null, lifetimeManager);
         }

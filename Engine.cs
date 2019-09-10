@@ -56,7 +56,7 @@ namespace Penguin.DependencyInjection
 
                     if (t.ImplementsInterface<ISelfRegistering>())
                     {
-                        Engine.Register(t, t, typeof(TransientServiceProvider));
+                        Register(t, t, typeof(TransientServiceProvider));
                     }
 
                     if (t.IsSubclassOf(typeof(StaticServiceProvider)))
