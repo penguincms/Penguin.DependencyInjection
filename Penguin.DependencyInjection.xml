@@ -576,6 +576,11 @@
             <param name="t">The registration type for the object to retrieve</param>
             <returns>A LIST of object instances that are part of the type registration</returns>
         </member>
+        <member name="M:Penguin.DependencyInjection.ServiceProviders.ScopedServiceProvider.Clear">
+            <summary>
+            Clears out the scoped services
+            </summary>
+        </member>
         <member name="P:Penguin.DependencyInjection.ServiceProviders.ScopedServiceProvider.Instances">
             <summary>
             A list of all the objects that were constructed in the scope containing this service provider (set to be scoped)
@@ -658,7 +663,7 @@
         </member>
         <member name="M:Penguin.DependencyInjection.ServiceScopes.ScopedServiceScope.Dispose">
             <summary>
-            This does nothing because it should all be handled by GC
+            This disposes of the scoped objects
             </summary>
         </member>
         <member name="T:Penguin.DependencyInjection.ServiceScopes.StaticServiceScope">

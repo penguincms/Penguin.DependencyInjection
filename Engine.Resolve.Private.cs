@@ -19,13 +19,9 @@ namespace Penguin.DependencyInjection
             resolutionPackage.AddStack(match);
 
             //We resolve with that registration. Or attempt to
-            AbstractServiceProvider thisManager = null;
-
-            if (!resolutionPackage.ServiceProviders.TryGetValue(match.ServiceProvider, out thisManager))
+            if (!resolutionPackage.ServiceProviders.TryGetValue(match.ServiceProvider, out AbstractServiceProvider thisManager))
             {
-                //Anything where the service provider is not registered, is a singleton
-                //This should only effect scoped providers when they're out of scope.
-                thisManager = new SingletonServiceProvider();
+                throw new Exception($"Type {match.ToInstantiate} could not be created because service provider of type {match.ServiceProvider} was not found in the current registrations");
             }
 
             //If no registration was found, or there was no instance existing

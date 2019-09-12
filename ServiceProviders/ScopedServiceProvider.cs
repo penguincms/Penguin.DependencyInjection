@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Penguin.DependencyInjection.ServiceProviders
 {
@@ -33,6 +34,24 @@ namespace Penguin.DependencyInjection.ServiceProviders
         public override object GetService(Type t)
         {
             return Instances.TryGetValue(t, out List<object> instances) ? instances : new List<object>();
+        }
+
+        /// <summary>
+        /// Clears out the scoped services
+        /// </summary>
+        public void Clear()
+        {
+            foreach (KeyValuePair<Type, List<Object>> instanceContainer in Instances) {
+                foreach (object o in instanceContainer.Value)
+                {
+                    if(o is IDisposable disposable)
+                    {
+                        disposable.Dispose();
+                    }
+                }
+            }
+
+            Instances.Clear();
         }
 
         /// <summary>

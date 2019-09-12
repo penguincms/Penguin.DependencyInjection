@@ -36,10 +36,12 @@ namespace Penguin.DependencyInjection.ServiceScopes
         }
 
         /// <summary>
-        /// This does nothing because it should all be handled by GC
+        /// This disposes of the scoped objects
         /// </summary>
         public void Dispose()
         {
+            RequestProvider.Clear();
+            RequestProvider = null;
         }
     }
 }
