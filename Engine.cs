@@ -10,6 +10,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -27,6 +28,7 @@ namespace Penguin.DependencyInjection
         /// Whitelists a list of assemblies through the Reflection TypeFactory and then grabs all types and attempts to register any types that are relevant to the
         /// engine
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We need to keep going nomatter what")]
         static Engine()
         {
             StaticLogger.Log($"Penguin.DependencyInjection: {Assembly.GetExecutingAssembly().GetName().Version}", StaticLogger.LoggingLevel.Call);
@@ -137,6 +139,9 @@ namespace Penguin.DependencyInjection
         /// <returns>The passed in object with resolved properties (just in case)</returns>
         public static T ResolveProperties<T>(T o, ResolutionPackage resolutionPackage)
         {
+            Contract.Requires(o != null);
+            Contract.Requires(resolutionPackage != null);
+
             Type oType = o.GetType();
 
             if (!ChildDependancies.ContainsKey(oType))
@@ -183,7 +188,7 @@ namespace Penguin.DependencyInjection
             }
             else
             {
-                throw new Exception("Service provider must inherit from either abstract or scoped");
+                throw new ArgumentException(WrongServiceProviderMessage);
             }
 
             AllProviders.Add(serviceProvider.GetType(), serviceProvider);
@@ -317,8 +322,6 @@ namespace Penguin.DependencyInjection
             }
         }
 
-
-        private static ConcurrentDictionary<Type, bool> ResolvableTypes { get; set; } = new ConcurrentDictionary<Type, bool>();
         internal static bool IsResolvable(Type t)
         {
             if (ResolvableTypes.TryGetValue(t, out bool toReturn))
@@ -366,13 +369,12 @@ namespace Penguin.DependencyInjection
             bool digDeeper = true;
             if (IsRegistered(t, out ConcurrentList<Registration> match))
             {
-                foreach(Registration r in match)
+                foreach (Registration r in match)
                 {
                     yield return r;
                     digDeeper = false;
                 }
             }
-
 
             if (t.IsGenericType)
             {
@@ -380,7 +382,6 @@ namespace Penguin.DependencyInjection
 
                 if (IsRegistered(genericTypeDefinition, out ConcurrentList<Registration> genericMatchList))
                 {
-
                     foreach (Registration genericMatch in genericMatchList)
                     {
                         if (genericMatch.ToInstantiate.IsGenericType)
@@ -396,10 +397,14 @@ namespace Penguin.DependencyInjection
 
             if (digDeeper && IsValidIEnumerable(t))
             {
-                foreach(Registration r in ResolveType(t.GetCollectionType())) {
+                foreach (Registration r in ResolveType(t.GetCollectionType()))
+                {
                     yield return r;
                 }
             }
         }
+
+        private static ConcurrentDictionary<Type, bool> ResolvableTypes { get; set; } = new ConcurrentDictionary<Type, bool>();
+        private const string WrongServiceProviderMessage = "Service provider must inherit from either abstract or scoped";
     }
 }

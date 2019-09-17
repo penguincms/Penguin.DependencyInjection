@@ -8,13 +8,13 @@ namespace Penguin.DependencyInjection.Objects
     /// Attempts to return a list of objects without constructing the list until it is accessed
     /// </summary>
     /// <typeparam name="T">Any type</typeparam>
-    public class LazyList<T> : IEnumerable<T>
+    public class LazyLoadCollection<T> : IEnumerable<T>
     {
         /// <summary>
         /// Constructs a new instance of this object
         /// </summary>
         /// <param name="loadingMethod">A Func that should be called on access to return a list of the provided type</param>
-        public LazyList(Func<List<T>> loadingMethod)
+        public LazyLoadCollection(Func<List<T>> loadingMethod)
         {
             this.LoadMe = loadingMethod;
         }
@@ -27,21 +27,20 @@ namespace Penguin.DependencyInjection.Objects
 
         IEnumerator IEnumerable.GetEnumerator() => this.BackingObject.GetEnumerator();
 
-        internal virtual List<T> _backingObject { get; set; }
-
         internal virtual List<T> BackingObject
         {
             get
             {
-                if (this._backingObject == null)
+                if (this.LoadedObject == null)
                 {
-                    this._backingObject = this.LoadMe.Invoke() ?? new List<T>();
+                    this.LoadedObject = this.LoadMe.Invoke() ?? new List<T>();
                 }
 
-                return this._backingObject;
+                return this.LoadedObject;
             }
         }
 
+        internal virtual List<T> LoadedObject { get; set; }
         internal virtual Func<List<T>> LoadMe { get; set; }
     }
 }

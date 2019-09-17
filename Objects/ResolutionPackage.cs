@@ -13,12 +13,12 @@ namespace Penguin.DependencyInjection.Objects
         /// <summary>
         /// A registration stack optionally used to detect circular references
         /// </summary>
-        public Stack<Registration> RegistrationStack { get; set; } = new Stack<Registration>();
+        public Stack<Registration> RegistrationStack { get; } = new Stack<Registration>();
 
         /// <summary>
         /// The collection of service providers to be used
         /// </summary>
-        public IDictionary<Type, AbstractServiceProvider> ServiceProviders { get; set; }
+        public IDictionary<Type, AbstractServiceProvider> ServiceProviders { get; }
 
         /// <summary>
         /// Constructs a new instance of the resolution package
@@ -33,8 +33,6 @@ namespace Penguin.DependencyInjection.Objects
         {
             if (Engine.DetectCircularResolution)
             {
-                RegistrationStack = RegistrationStack ?? new Stack<Registration>();
-
                 if (!RegistrationStack.Contains(match))
                 {
                     RegistrationStack.Push(match);

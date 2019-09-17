@@ -35,13 +35,53 @@ namespace Penguin.DependencyInjection.ServiceScopes
             ServiceProvider = engine;
         }
 
+        // This code added to correctly implement the disposable pattern.
         /// <summary>
-        /// This disposes of the scoped objects
+        /// Disposes of the items in the scope
         /// </summary>
         public void Dispose()
         {
-            RequestProvider.Clear();
-            RequestProvider = null;
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Disposes of the items in the service scope
+        /// </summary>
+        /// <param name="disposing">True if clear managed</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    RequestProvider.Clear();
+                    RequestProvider = null;
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+
+        private bool disposedValue = false; // To detect redundant calls
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~ScopedServiceScope()
+        // {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+        /// <summary>
+        /// Disposes of the items in the scope
+        /// </summary>
+        ~ScopedServiceScope()
+        {
+            Dispose(false);
         }
     }
 }

@@ -134,8 +134,8 @@
             <summary>
             Registers a type using the specified lifetime manager
             </summary>
-            <typeparam name="Y">The type to register</typeparam>
-            <typeparam name="X">The type to return</typeparam>
+            <typeparam name="TRegister">The type to register</typeparam>
+            <typeparam name="TReturn">The type to return</typeparam>
             <param name="lifetimeManager">The type of the ServiceProvider to use for resolution</param>
         </member>
         <member name="M:Penguin.DependencyInjection.Engine.Register(System.Type,System.Type,System.Type)">
@@ -150,7 +150,7 @@
             <summary>
             Registers a type with a func to provide an instance later
             </summary>
-            <typeparam name="Y">The type to register</typeparam>
+            <typeparam name="TRegister">The type to register</typeparam>
             <param name="injectionFactory">The func to create an instance of the object</param>
             <param name="lifetimeManager">The type of ServiceProvider that should store the creaete instance</param>
         </member>
@@ -174,8 +174,8 @@
             <summary>
             Registers all types between the two given types (in a heiararchy) to resolve to the first type (inclusive)
             </summary>
-            <typeparam name="Base">The most derived type in the stack</typeparam>
-            <typeparam name="Parent">The least derived type in the stack</typeparam>
+            <typeparam name="TDerived">The most derived type in the stack</typeparam>
+            <typeparam name="TInherited">The least derived type in the stack</typeparam>
             <param name="lifetimeManager">The type of the ServiceProvider to use for resolution</param>
         </member>
         <member name="M:Penguin.DependencyInjection.Engine.RegisterInstance(System.Type,System.Object,System.Type)">
@@ -190,8 +190,16 @@
             <summary>
             Registers a concrete object instance to the given provider
             </summary>
-            <typeparam name="Y">The tyoe to register</typeparam>
+            <typeparam name="TRegister">The type to register</typeparam>
             <param name="o">The object instance to register</param>
+            <param name="lifetimeManager">The type of the ServiceProvider to use for resolution</param>
+        </member>
+        <member name="M:Penguin.DependencyInjection.Engine.RegisterInstanceAllBaseTypes(System.Type,System.Object,System.Type)">
+            <summary>
+            Registers all parent types of the given object to the specified instance
+            </summary>
+            <param name="Base">The base type to use as a cut off for the registrations (so we dont register something like "object)</param>
+            <param name="Instance">The object instance to register</param>
             <param name="lifetimeManager">The type of the ServiceProvider to use for resolution</param>
         </member>
         <member name="M:Penguin.DependencyInjection.Engine.Unregister(System.Type)">
@@ -207,14 +215,6 @@
             </summary>
             <typeparam name="T">The type to remove</typeparam>
             <returns>Whether or not the unregistration was a success</returns>
-        </member>
-        <member name="M:Penguin.DependencyInjection.Engine.RegisterInstanceAllBaseTypes(System.Type,System.Object,System.Type)">
-            <summary>
-            Registers all parent types of the given object to the specified instance
-            </summary>
-            <param name="Base">The base type to use as a cut off for the registrations (so we dont register something like "object)</param>
-            <param name="Instance">The object instance to register</param>
-            <param name="lifetimeManager">The type of the ServiceProvider to use for resolution</param>
         </member>
         <member name="M:Penguin.DependencyInjection.Engine.GetService(System.Type)">
             <summary>
@@ -267,38 +267,12 @@
             <param name="optional">Dont throw an error if its null</param>
             <returns>An instance of the requested type, if registered</returns>
         </member>
-        <member name="T:Penguin.DependencyInjection.Engine.Static">
-            <summary>
-            Methods that allow for type resolutions using static providers, to remove need to instantiate engine if there are no scoped providers
-            </summary>
-        </member>
-        <member name="M:Penguin.DependencyInjection.Engine.Static.GetService``1">
+        <member name="M:Penguin.DependencyInjection.Engine.GetService``1">
             <summary>
             Attempts to resolve a service using registrations
             </summary>
             <typeparam name="T">The type of class being requested</typeparam>
             <returns>The registered or constructed instance of the class, or null, or error</returns>
-        </member>
-        <member name="M:Penguin.DependencyInjection.Engine.Static.GetService(System.Type)">
-            <summary>
-            Attempts to resolve a service using registrations
-            </summary>
-            <param name="serviceType">The type of class being requested</param>
-            <returns>The registered or constructed instance of the class, or null, or error</returns>
-        </member>
-        <member name="M:Penguin.DependencyInjection.Engine.Static.ResolveMany(System.Type)">
-            <summary>
-            Attempts to resolve an IEnumerable of all registered instances of the type requested
-            </summary>
-            <param name="t">The type of class being requested</param>
-            <returns>The registered or constructed instances of the class, or null, or error</returns>
-        </member>
-        <member name="M:Penguin.DependencyInjection.Engine.Static.ResolveSingle(System.Type)">
-            <summary>
-            Returns a single instance of the type based on the LAST registration
-            </summary>
-            <param name="t">The type of class being requested</param>
-            <returns>The registered or constructed instances of the class, or null, or error</returns>
         </member>
         <member name="T:Penguin.DependencyInjection.Exceptions.FailingConstructor">
             <summary>
@@ -349,10 +323,27 @@
             </summary>
             <typeparam name="T">Any collection type</typeparam>
         </member>
+        <member name="P:Penguin.DependencyInjection.Objects.ConcurrentList`1.Count">
+            <summary>
+            Returns a count of the items in the collection
+            </summary>
+        </member>
+        <member name="P:Penguin.DependencyInjection.Objects.ConcurrentList`1.IsReadOnly">
+            <summary>
+            This is not read only
+            </summary>
+        </member>
         <member name="M:Penguin.DependencyInjection.Objects.ConcurrentList`1.#ctor">
             <summary>
             Constucts a new instance of this class
             </summary>
+        </member>
+        <member name="P:Penguin.DependencyInjection.Objects.ConcurrentList`1.Item(System.Int32)">
+            <summary>
+            Gets/Sets the item at the given index
+            </summary>
+            <param name="index">The index of the item to set/get</param>
+            <returns>The item at that index</returns>
         </member>
         <member name="M:Penguin.DependencyInjection.Objects.ConcurrentList`1.Add(`0)">
             <summary>
@@ -360,11 +351,44 @@
             </summary>
             <param name="o">The object to add</param>
         </member>
+        <member name="M:Penguin.DependencyInjection.Objects.ConcurrentList`1.Clear">
+            <summary>
+            Clears the backing list
+            </summary>
+        </member>
+        <member name="M:Penguin.DependencyInjection.Objects.ConcurrentList`1.Contains(`0)">
+            <summary>
+            Checks if the list contains the item
+            </summary>
+            <param name="item">The item to check for</param>
+            <returns>True if the item exists in the list</returns>
+        </member>
+        <member name="M:Penguin.DependencyInjection.Objects.ConcurrentList`1.CopyTo(`0[],System.Int32)">
+            <summary>
+            Copies to the array
+            </summary>
+            <param name="array">The array to copy to</param>
+            <param name="arrayIndex">The index to start the copy at</param>
+        </member>
         <member name="M:Penguin.DependencyInjection.Objects.ConcurrentList`1.GetEnumerator">
             <summary>
             Returns a thread safe enumerator
             </summary>
             <returns>A thread safe enumerator</returns>
+        </member>
+        <member name="M:Penguin.DependencyInjection.Objects.ConcurrentList`1.IndexOf(`0)">
+            <summary>
+            Returns the index of the item
+            </summary>
+            <param name="item">The item to check for</param>
+            <returns>The index of the item</returns>
+        </member>
+        <member name="M:Penguin.DependencyInjection.Objects.ConcurrentList`1.Insert(System.Int32,`0)">
+            <summary>
+            Inserts an item into the collection
+            </summary>
+            <param name="index">The index to insert to</param>
+            <param name="item">The item to insert</param>
         </member>
         <member name="M:Penguin.DependencyInjection.Objects.ConcurrentList`1.Remove(`0)">
             <summary>
@@ -372,7 +396,20 @@
             </summary>
             <param name="o">The object to remove</param>
         </member>
-        <member name="P:Penguin.DependencyInjection.Objects.ConcurrentList`1._backing">
+        <member name="M:Penguin.DependencyInjection.Objects.ConcurrentList`1.System#Collections#Generic#ICollection{T}#Remove(`0)">
+            <summary>
+            Removes an item from the list
+            </summary>
+            <param name="item">The item to remove</param>
+            <returns>True if it was removed successfully</returns>
+        </member>
+        <member name="M:Penguin.DependencyInjection.Objects.ConcurrentList`1.RemoveAt(System.Int32)">
+            <summary>
+            Removes the item at the index
+            </summary>
+            <param name="index">The idex of the item to remove</param>
+        </member>
+        <member name="P:Penguin.DependencyInjection.Objects.ConcurrentList`1.Backing">
             <summary>
             The backing object for this collection
             </summary>
@@ -445,19 +482,19 @@
             </summary>
             <param name="loadingMethod">A Func that should be called on access to return an IEnumerable of the provided type</param>
         </member>
-        <member name="T:Penguin.DependencyInjection.Objects.LazyList`1">
+        <member name="T:Penguin.DependencyInjection.Objects.LazyLoadCollection`1">
             <summary>
             Attempts to return a list of objects without constructing the list until it is accessed
             </summary>
             <typeparam name="T">Any type</typeparam>
         </member>
-        <member name="M:Penguin.DependencyInjection.Objects.LazyList`1.#ctor(System.Func{System.Collections.Generic.List{`0}})">
+        <member name="M:Penguin.DependencyInjection.Objects.LazyLoadCollection`1.#ctor(System.Func{System.Collections.Generic.List{`0}})">
             <summary>
             Constructs a new instance of this object
             </summary>
             <param name="loadingMethod">A Func that should be called on access to return a list of the provided type</param>
         </member>
-        <member name="M:Penguin.DependencyInjection.Objects.LazyList`1.GetEnumerator">
+        <member name="M:Penguin.DependencyInjection.Objects.LazyLoadCollection`1.GetEnumerator">
             <summary>
             Returns the underlying enumerator for the list
             </summary>
@@ -569,17 +606,17 @@
             <param name="t">The type registration to hold the instance</param>
             <param name="o">The object instance to add</param>
         </member>
+        <member name="M:Penguin.DependencyInjection.ServiceProviders.ScopedServiceProvider.Clear">
+            <summary>
+            Clears out the scoped services
+            </summary>
+        </member>
         <member name="M:Penguin.DependencyInjection.ServiceProviders.ScopedServiceProvider.GetService(System.Type)">
             <summary>
             Gets a LIST of object instances by the registered type
             </summary>
             <param name="t">The registration type for the object to retrieve</param>
             <returns>A LIST of object instances that are part of the type registration</returns>
-        </member>
-        <member name="M:Penguin.DependencyInjection.ServiceProviders.ScopedServiceProvider.Clear">
-            <summary>
-            Clears out the scoped services
-            </summary>
         </member>
         <member name="P:Penguin.DependencyInjection.ServiceProviders.ScopedServiceProvider.Instances">
             <summary>
@@ -663,7 +700,18 @@
         </member>
         <member name="M:Penguin.DependencyInjection.ServiceScopes.ScopedServiceScope.Dispose">
             <summary>
-            This disposes of the scoped objects
+            Disposes of the items in the scope
+            </summary>
+        </member>
+        <member name="M:Penguin.DependencyInjection.ServiceScopes.ScopedServiceScope.Dispose(System.Boolean)">
+            <summary>
+            Disposes of the items in the service scope
+            </summary>
+            <param name="disposing">True if clear managed</param>
+        </member>
+        <member name="M:Penguin.DependencyInjection.ServiceScopes.ScopedServiceScope.Finalize">
+            <summary>
+            Disposes of the items in the scope
             </summary>
         </member>
         <member name="T:Penguin.DependencyInjection.ServiceScopes.StaticServiceScope">
@@ -682,6 +730,17 @@
             </summary>
         </member>
         <member name="M:Penguin.DependencyInjection.ServiceScopes.StaticServiceScope.Dispose">
+            <summary>
+            Unused
+            </summary>
+        </member>
+        <member name="M:Penguin.DependencyInjection.ServiceScopes.StaticServiceScope.Dispose(System.Boolean)">
+            <summary>
+            Unused
+            </summary>
+            <param name="disposing">Unused</param>
+        </member>
+        <member name="M:Penguin.DependencyInjection.ServiceScopes.StaticServiceScope.Finalize">
             <summary>
             Unused
             </summary>

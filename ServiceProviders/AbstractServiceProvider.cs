@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 
 namespace Penguin.DependencyInjection.ServiceProviders
 {
@@ -20,6 +21,8 @@ namespace Penguin.DependencyInjection.ServiceProviders
         /// <param name="o">The object to resolve to</param>
         public void Add(object o)
         {
+            Contract.Requires(o != null);
+
             Add(o.GetType(), o);
         }
 

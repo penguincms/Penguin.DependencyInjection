@@ -1,4 +1,5 @@
 ﻿using Penguin.DependencyInjection.Abstractions;
+using System.Diagnostics.Contracts;
 
 namespace Penguin.DependencyInjection.ServiceProviders
 {
@@ -14,6 +15,8 @@ namespace Penguin.DependencyInjection.ServiceProviders
         /// <param name="engine">The dependency injector to register</param>
         public virtual void Register(Engine engine)
         {
+            Contract.Requires(engine != null);
+
             engine.Register(this);
         }
     }

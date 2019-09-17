@@ -5,6 +5,7 @@ namespace Penguin.DependencyInjection.Attributes
     /// <summary>
     /// Allows attributing a class so that the DI automatically registers it to itself with the given Service Provider type
     /// </summary>
+    [AttributeUsage(AttributeTargets.Class)]
     public class ServiceProviderAttribute : Attribute
     {
         /// <summary>

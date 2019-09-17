@@ -1,12 +1,11 @@
-﻿using Penguin.DependencyInjection.Objects;
+﻿using Penguin.Debugging;
+using Penguin.DependencyInjection.Objects;
 using Penguin.DependencyInjection.ServiceProviders;
 using Penguin.Reflection.Extensions;
 using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Penguin.Debugging;
 
 namespace Penguin.DependencyInjection
 {
@@ -22,10 +21,11 @@ namespace Penguin.DependencyInjection
             //We resolve with that registration. Or attempt to
             if (!resolutionPackage.ServiceProviders.TryGetValue(match.ServiceProvider, out AbstractServiceProvider thisManager))
             {
-
-                if(!resolutionPackage.ServiceProviders.TryGetValue(typeof(TransientServiceProvider), out thisManager)) {
+                if (!resolutionPackage.ServiceProviders.TryGetValue(typeof(TransientServiceProvider), out thisManager))
+                {
                     throw new Exception($"Type {match.ToInstantiate} could not be created because service provider of type {match.ServiceProvider} was not found in the current registrations and a transient service provider could not be found");
-                } else
+                }
+                else
                 {
                     StaticLogger.Log($"Type {match.ToInstantiate} created using transient service provider because {match.ServiceProvider} was not found in the current registrations", StaticLogger.LoggingLevel.Call);
                 }

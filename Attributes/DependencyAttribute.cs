@@ -5,6 +5,7 @@ namespace Penguin.DependencyInjection.Attributes
     /// <summary>
     /// Marks a property as being injectable. Property remains null if not registered
     /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
     public sealed class DependencyAttribute : Attribute
     {
         /// <summary>

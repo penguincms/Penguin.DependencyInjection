@@ -12,7 +12,7 @@ namespace Penguin.DependencyInjection.ServiceProviders
         /// <summary>
         /// A static list of the current instances held by this provider
         /// </summary>
-        public static ConcurrentDictionary<Type, List<object>> Instances { get; set; } = new ConcurrentDictionary<Type, List<object>>();
+        public static ConcurrentDictionary<Type, List<object>> Instances { get; } = new ConcurrentDictionary<Type, List<object>>();
 
         /// <summary>
         /// Add a new instance to the provider

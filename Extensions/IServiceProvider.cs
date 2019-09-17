@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 
 namespace Penguin.DependencyInjection.Extensions
 {
@@ -13,6 +14,11 @@ namespace Penguin.DependencyInjection.Extensions
         /// <typeparam name="T">Type type to request</typeparam>
         /// <param name="provider">The service provider to use as a source</param>
         /// <returns>Any resolved object casted to the requested type</returns>
-        public static T GetService<T>(this IServiceProvider provider) where T : class => provider.GetService(typeof(T)) as T;
+        public static T GetService<T>(this IServiceProvider provider) where T : class
+        {
+            Contract.Requires(provider != null);
+
+            return provider.GetService(typeof(T)) as T;
+        }
     }
 }

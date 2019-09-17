@@ -17,18 +17,19 @@ namespace Penguin.DependencyInjection.Exceptions
         /// <summary>
         /// The constructor parameters that were not found registered in the dependency injector
         /// </summary>
-        public ParameterInfo[] MissingParameters { get; set; }
+        public IEnumerable<ParameterInfo> MissingParameters { get; set; }
     }
 
     /// <summary>
     /// Exception that contains information needed to understand why an object was not able to be constructed
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "This class is only supposed to be constructed internally")]
     public class MissingInjectableConstructorException : Exception
     {
         /// <summary>
         /// Information for each constructor that was tried, and what it was missing
         /// </summary>
-        public List<FailingConstructor> FailedConstructors { get; set; }
+        public List<FailingConstructor> FailedConstructors { get; }
 
         /// <summary>
         /// The type that was attempted to be constructed unsuccessfully
@@ -38,7 +39,9 @@ namespace Penguin.DependencyInjection.Exceptions
         /// <summary>
         /// A string message containing all of the information found in concrete form in this exception (for logging)
         /// </summary>
-        public override string Message { get { return _message; } }
+        public override string Message { get { return MessageText; } }
+
+        internal string MessageText { get; set; }
 
         internal MissingInjectableConstructorException(Type failingType)
         {
@@ -46,11 +49,9 @@ namespace Penguin.DependencyInjection.Exceptions
             FailedConstructors = new List<FailingConstructor>();
         }
 
-        internal string _message { get; set; }
-
         internal void SetMessage(string message)
         {
-            _message = message;
+            MessageText = message;
         }
     }
 }
