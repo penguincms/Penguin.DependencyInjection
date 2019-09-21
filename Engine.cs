@@ -360,7 +360,7 @@ namespace Penguin.DependencyInjection
 
         internal static bool IsValidIEnumerable(Type t)
         {
-            return (typeof(IEnumerable).IsAssignableFrom(t) && t != typeof(string));
+            return (typeof(IEnumerable).IsAssignableFrom(t) && !typeof(IQueryable).IsAssignableFrom(t) && t != typeof(string));
         }
 
         internal static IEnumerable<Registration> ResolveType(Type t)
