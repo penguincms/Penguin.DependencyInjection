@@ -31,6 +31,7 @@ namespace Penguin.DependencyInjection.ServiceScopes
             engine.Register(RequestProvider);
 
             RequestProvider.Add(engine);
+            RequestProvider.Add(typeof(IServiceProvider), engine);
 
             ServiceProvider = engine;
         }
