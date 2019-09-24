@@ -185,7 +185,7 @@ namespace Penguin.DependencyInjection
 
             ResolvableTypes.TryRemove(dr.RegisteredType, out _);
 
-            registrations.Add(dr);
+            registrations.Insert(0, dr);
 
             return;
         }
