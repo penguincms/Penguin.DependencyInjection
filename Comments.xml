@@ -146,7 +146,7 @@
             <param name="x">The type to return</param>
             <param name="lifetimeManager">The type of the ServiceProvider to use for resolution</param>
         </member>
-        <member name="M:Penguin.DependencyInjection.Engine.Register``1(System.Func{System.IServiceProvider,System.Object},System.Type)">
+        <member name="M:Penguin.DependencyInjection.Engine.Register``1(System.Func{System.IServiceProvider,``0},System.Type)">
             <summary>
             Registers a type with a func to provide an instance later
             </summary>

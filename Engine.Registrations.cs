@@ -46,7 +46,7 @@ namespace Penguin.DependencyInjection
         /// <typeparam name="TRegister">The type to register</typeparam>
         /// <param name="injectionFactory">The func to create an instance of the object</param>
         /// <param name="lifetimeManager">The type of ServiceProvider that should store the creaete instance</param>
-        public static void Register<TRegister>(Func<IServiceProvider, object> injectionFactory, Type lifetimeManager = null) => Engine.Register(typeof(TRegister), injectionFactory, lifetimeManager);
+        public static void Register<TRegister>(Func<IServiceProvider, TRegister> injectionFactory, Type lifetimeManager = null) => Engine.Register(typeof(TRegister), (serviceProvider) => injectionFactory.Invoke(serviceProvider), lifetimeManager);
 
         /// <summary>
         /// Registers a type with a func to provide an instance later
