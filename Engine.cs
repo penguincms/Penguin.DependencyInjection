@@ -1,5 +1,6 @@
 ﻿using Penguin.Debugging;
-using Penguin.DependencyInjection.Abstractions;
+using Penguin.DependencyInjection.Abstractions.Interfaces;
+using Penguin.DependencyInjection.Abstractions.Attributes;
 using Penguin.DependencyInjection.Attributes;
 using Penguin.DependencyInjection.Exceptions;
 using Penguin.DependencyInjection.Objects;
@@ -47,7 +48,17 @@ namespace Penguin.DependencyInjection
 
                     if (autoReg != null)
                     {
-                        Register(t, t, null, autoReg.ServiceProvider);
+                        if (autoReg.RegisteredTypes.Length > 0)
+                        {
+                            foreach(Type registeredType in autoReg.RegisteredTypes)
+                            {
+                                Register(registeredType, t, null, autoReg.ServiceProvider);
+                            }
+                        }
+                        else
+                        {
+                            Register(t, t, null, autoReg.ServiceProvider);
+                        }
                     }
 
                     if (t.ImplementsInterface<IRegisterDependencies>())

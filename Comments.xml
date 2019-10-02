@@ -31,22 +31,6 @@
             </summary>
             <param name="findService">Dont set this because I dont know what it does</param>
         </member>
-        <member name="T:Penguin.DependencyInjection.Attributes.ServiceProviderAttribute">
-            <summary>
-            Allows attributing a class so that the DI automatically registers it to itself with the given Service Provider type
-            </summary>
-        </member>
-        <member name="P:Penguin.DependencyInjection.Attributes.ServiceProviderAttribute.ServiceProvider">
-            <summary>
-            The type of the service provider that should be used to resolve this class
-            </summary>
-        </member>
-        <member name="M:Penguin.DependencyInjection.Attributes.ServiceProviderAttribute.#ctor(System.Type)">
-            <summary>
-            Constructs a new instance of this attribute
-            </summary>
-            <param name="serviceProvider">The type of the service provider that should be used to resolve this class</param>
-        </member>
         <member name="T:Penguin.DependencyInjection.Engine">
             <summary>
             The core dependency engine. Instantiation needed to support Scoped service providers
