@@ -58,6 +58,11 @@
             </summary>
             <returns>A clone of the current registrations</returns>
         </member>
+        <member name="P:Penguin.DependencyInjection.Engine.DependencyConsolidators">
+            <summary>
+            Returns a copy of the internal dependency consolidator list
+            </summary>
+        </member>
         <member name="M:Penguin.DependencyInjection.Engine.IsRegistered(System.Type)">
             <summary>
             Checks to see if a type is registered as an injection target

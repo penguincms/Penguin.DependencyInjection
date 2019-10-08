@@ -15,7 +15,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Microsoft.Extensions.DependencyInjection;
+using Penguin.DependencyInjection.ServiceRegisters;
 
 namespace Penguin.DependencyInjection
 {
@@ -26,21 +26,7 @@ namespace Penguin.DependencyInjection
         /// </summary>
         public static bool DetectCircularResolution { get; set; } = false;
 
-        private static Type GetServiceProvider(ServiceLifetime lifetime)
-        {
-            switch(lifetime)
-            {
-                case ServiceLifetime.Scoped:
-                    return typeof(ScopedServiceProvider);
-                case ServiceLifetime.Singleton:
-                    return typeof(StaticServiceProvider);
-                case ServiceLifetime.Transient:
-
-                    return typeof(TransientServiceProvider);
-                default:
-                    throw new Exception($"Service provider for lifetime {lifetime} not mapped");
-            }
-        }
+        private static StaticServiceRegister Registrar = new StaticServiceRegister();
         /// <summary>
         /// Whitelists a list of assemblies through the Reflection TypeFactory and then grabs all types and attempts to register any types that are relevant to the
         /// engine
@@ -69,25 +55,30 @@ namespace Penguin.DependencyInjection
                             {
                                 foreach (Type registeredType in ra.RegisteredTypes)
                                 {
-                                    Register(registeredType, t, null, GetServiceProvider(ra.Lifetime));
+                                    Register(registeredType, t, null, StaticServiceRegister.GetServiceProvider(ra.Lifetime));
                                 }
                             }
                             else
                             {
-                                Register(t, t, null, GetServiceProvider(ra.Lifetime));
+                                Register(t, t, null, StaticServiceRegister.GetServiceProvider(ra.Lifetime));
                             }
                         } else if (autoReg is RegisterThroughMostDerivedAttribute rmd)
                         {
-                            RegisterAllBaseTypes(rmd.RequestType, TypeFactory.GetMostDerivedType(t), GetServiceProvider(rmd.Lifetime));
+                            RegisterAllBaseTypes(rmd.RequestType, TypeFactory.GetMostDerivedType(t), StaticServiceRegister.GetServiceProvider(rmd.Lifetime));
                         }
                     }
 
                     if (t.ImplementsInterface<IRegisterDependencies>())
                     {
                         StaticLogger.Log($"DependencyInjector: Registering {nameof(IRegisterDependencies)} of type {t.FullName} from assembly {t.Assembly.FullName}", StaticLogger.LoggingLevel.Call);
-                        (Activator.CreateInstance(t) as IRegisterDependencies).RegisterDependencies((r, i, s) => {
-                            Register(r, i, GetServiceProvider(s));
-                        });
+                        (Activator.CreateInstance(t) as IRegisterDependencies).RegisterDependencies(Registrar);
+                    }
+
+                    if (t.ImplementsInterface(typeof(IConsolidateDependencies<>)))
+                    {
+                        foreach(Type type in t.GetClosedImplementationsFor(typeof(IConsolidateDependencies<>))) {
+                            dependencyConsolidators.TryAdd(type.GetGenericArguments()[0], t);
+                        }
                     }
 
                     if (t.ImplementsInterface<ISelfRegistering>())
@@ -147,6 +138,26 @@ namespace Penguin.DependencyInjection
             }
 
             return toReturn;
+        }
+
+        private static ConcurrentDictionary<Type, Type> dependencyConsolidators = new ConcurrentDictionary<Type, Type>();
+
+        /// <summary>
+        /// Returns a copy of the internal dependency consolidator list
+        /// </summary>
+        public static Dictionary<Type, Type> DependencyConsolidators
+        {
+            get
+            {
+                Dictionary<Type, Type> toReturn = new Dictionary<Type, Type>(dependencyConsolidators.Count);
+
+                foreach(KeyValuePair<Type, Type> consolidator in dependencyConsolidators)
+                {
+                    toReturn.Add(consolidator.Key, consolidator.Value);
+                }
+
+                return toReturn;
+            }
         }
 
         /// <summary>
