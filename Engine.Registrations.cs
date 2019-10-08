@@ -59,8 +59,8 @@ namespace Penguin.DependencyInjection
         /// <summary>
         /// Registers all types between the two given types (in a heiararchy) to resolve to the first type (inclusive)
         /// </summary>
-        /// <param name="Base">The most derived type in the stack</param>
-        /// <param name="Parent">The least derived type in the stack</param>
+        /// <param name="Base">The least derived type in the stack</param>
+        /// <param name="Parent">The most derived type in the stack</param>
         /// <param name="lifetimeManager">The type of the ServiceProvider to use for resolution</param>
         public static void RegisterAllBaseTypes(Type Base, Type Parent, Type lifetimeManager = null)
         {
