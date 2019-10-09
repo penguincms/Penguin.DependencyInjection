@@ -1,5 +1,6 @@
 ﻿using Penguin.Debugging;
 using Penguin.DependencyInjection.Abstractions.Interfaces;
+using Penguin.DependencyInjection.Interfaces;
 using Penguin.DependencyInjection.Objects;
 using Penguin.DependencyInjection.ServiceProviders;
 using Penguin.Reflection.Extensions;
@@ -113,19 +114,14 @@ namespace Penguin.DependencyInjection
             }
 
             //This whole IF block attempts to find a dependency consolidator for the requested type, and if its found it squishes all the registered instances into it
-            //Which effectively allows for a class that converts an IEnumerable of a registered type into a single instance, which is great for things like providers 
-            //that may be registered independently but can be treated as a single unit through a consolidating class, that way everywhere the dependency is resolved 
+            //Which effectively allows for a class that converts an IEnumerable of a registered type into a single instance, which is great for things like providers
+            //that may be registered independently but can be treated as a single unit through a consolidating class, that way everywhere the dependency is resolved
             //doesn't need to accept an IEnumerable of the types
             if (DependencyConsolidators.TryGetValue(t, out Type consolidatorType))
             {
-                IList instances = Activator.CreateInstance(typeof(List<>).MakeGenericType(t)) as IList;
-
-                foreach (Registration reg in ResolveType(t))
+                if (resolutionPackage.DependencyConsolidators.TryGetValue(consolidatorType, out object consolidatedObject))
                 {
-                    foreach(object instance in Resolve(reg, resolutionPackage, optional))
-                    {
-                        instances.Add(instance);
-                    }
+                    return consolidatedObject;
                 }
 
                 object consolidator;
@@ -133,15 +129,26 @@ namespace Penguin.DependencyInjection
                 try
                 {
                     consolidator = Activator.CreateInstance(consolidatorType);
-                } catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
                     throw new Exception($"An error occured or creating and instance of the dependency consolidator type {consolidatorType}", ex);
                 }
 
-                MethodInfo consolidationMethod = consolidatorType.GetMethods().Where(m => m.Name == nameof(IConsolidateDependencies<object>.Consolidate)).Where(m => m.GetParameters().Count() == 1 && m.GetParameters()[0].ParameterType == typeof(IEnumerable<>).MakeGenericType(t)).Single();
+                IDeferredResolutionCollection deferredResolutionCollection = Activator.CreateInstance(typeof(DeferredResolutionCollection<>).MakeGenericType(t)) as IDeferredResolutionCollection;
 
-                return consolidationMethod.Invoke(consolidator, new object[] { instances });
+                foreach (Registration reg in ResolveType(t))
+                {
+                    deferredResolutionCollection.Add(() => Resolve(reg, resolutionPackage, optional).LastOrDefault());
+                }
 
+                MethodInfo setMethod = typeof(IConsolidateDependencies<>).MakeGenericType(t).GetMethod(nameof(IConsolidateDependencies<object>.Consolidate));
+
+                consolidatedObject = setMethod.Invoke(consolidator, new object[] { deferredResolutionCollection });
+
+                resolutionPackage.DependencyConsolidators.Add(t, consolidatedObject);
+
+                return consolidatedObject;
             }
             else
             {
@@ -154,7 +161,6 @@ namespace Penguin.DependencyInjection
                         return toReturn;
                     }
                 }
-
             }
 
             return null;

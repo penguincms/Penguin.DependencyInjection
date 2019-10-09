@@ -9,6 +9,11 @@ namespace Penguin.DependencyInjection.ServiceProviders
     public class ScopedServiceProvider : AbstractServiceProvider
     {
         /// <summary>
+        /// A list of all the objects that were constructed in the scope containing this service provider (set to be scoped)
+        /// </summary>
+        protected Dictionary<Type, List<object>> Instances { get; } = new Dictionary<Type, List<object>>();
+
+        /// <summary>
         /// Adds a new object instance to the provided type registrations list of instances
         /// </summary>
         /// <param name="t">The type registration to hold the instance</param>
@@ -53,10 +58,5 @@ namespace Penguin.DependencyInjection.ServiceProviders
         {
             return Instances.TryGetValue(t, out List<object> instances) ? instances : new List<object>();
         }
-
-        /// <summary>
-        /// A list of all the objects that were constructed in the scope containing this service provider (set to be scoped)
-        /// </summary>
-        protected Dictionary<Type, List<object>> Instances { get; } = new Dictionary<Type, List<object>>();
     }
 }

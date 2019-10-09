@@ -2,12 +2,9 @@
 using Penguin.DependencyInjection.Abstractions.Interfaces;
 using Penguin.DependencyInjection.ServiceProviders;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Penguin.DependencyInjection.ServiceRegisters
 {
-
     internal class StaticServiceRegister : IServiceRegister
     {
         public void Register<TRegistration, TImplementation>(ServiceLifetime serviceLifetime) where TImplementation : TRegistration
@@ -36,11 +33,13 @@ namespace Penguin.DependencyInjection.ServiceRegisters
             {
                 case ServiceLifetime.Scoped:
                     return typeof(ScopedServiceProvider);
-                case ServiceLifetime.Singleton:
-                    return typeof(StaticServiceProvider);
-                case ServiceLifetime.Transient:
 
+                case ServiceLifetime.Singleton:
+                    return typeof(SingletonServiceProvider);
+
+                case ServiceLifetime.Transient:
                     return typeof(TransientServiceProvider);
+
                 default:
                     throw new Exception($"Service provider for lifetime {lifetime} not mapped");
             }

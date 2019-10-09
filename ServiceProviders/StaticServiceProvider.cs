@@ -1,5 +1,4 @@
-﻿using Penguin.DependencyInjection.Abstractions;
-using Penguin.DependencyInjection.Abstractions.Interfaces;
+﻿using Penguin.DependencyInjection.Abstractions.Interfaces;
 using System.Diagnostics.Contracts;
 
 namespace Penguin.DependencyInjection.ServiceProviders

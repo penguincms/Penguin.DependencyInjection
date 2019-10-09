@@ -1,10 +1,11 @@
 ﻿using Penguin.Debugging;
-using Penguin.DependencyInjection.Abstractions.Interfaces;
 using Penguin.DependencyInjection.Abstractions.Attributes;
+using Penguin.DependencyInjection.Abstractions.Interfaces;
 using Penguin.DependencyInjection.Attributes;
 using Penguin.DependencyInjection.Exceptions;
 using Penguin.DependencyInjection.Objects;
 using Penguin.DependencyInjection.ServiceProviders;
+using Penguin.DependencyInjection.ServiceRegisters;
 using Penguin.Reflection;
 using Penguin.Reflection.Extensions;
 using System;
@@ -15,18 +16,44 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Penguin.DependencyInjection.ServiceRegisters;
 
 namespace Penguin.DependencyInjection
 {
     public partial class Engine : IServiceProvider
     {
         /// <summary>
+        /// Returns a copy of the internal dependency consolidator list
+        /// </summary>
+        public static Dictionary<Type, Type> DependencyConsolidators
+        {
+            get
+            {
+                Dictionary<Type, Type> toReturn = new Dictionary<Type, Type>(dependencyConsolidators.Count);
+
+                foreach (KeyValuePair<Type, Type> consolidator in dependencyConsolidators)
+                {
+                    toReturn.Add(consolidator.Key, consolidator.Value);
+                }
+
+                return toReturn;
+            }
+        }
+
+        /// <summary>
         /// If true, maintains a resolution stack to attempt to prevent a stack overflow. Likely incurs a performance penalty. Useful for debugging. Default false.
         /// </summary>
         public static bool DetectCircularResolution { get; set; } = false;
 
-        private static StaticServiceRegister Registrar = new StaticServiceRegister();
+        internal static ConcurrentDictionary<Type, List<PropertyInfo>> ChildDependancies { get; set; }
+        internal static ConcurrentDictionary<Type, ConcurrentList<Registration>> Registrations { get; set; }
+        internal static IDictionary<Type, AbstractServiceProvider> StaticProviders { get; set; } = new ConcurrentDictionary<Type, AbstractServiceProvider>();
+        internal IDictionary<Type, AbstractServiceProvider> AllProviders { get; set; } = new ConcurrentDictionary<Type, AbstractServiceProvider>();
+        internal IDictionary<Type, AbstractServiceProvider> ScopedProviders { get; set; } = new Dictionary<Type, AbstractServiceProvider>();
+        private static ConcurrentDictionary<Type, bool> ResolvableTypes { get; set; } = new ConcurrentDictionary<Type, bool>();
+        private const string WrongServiceProviderMessage = "Service provider must inherit from either abstract or scoped";
+        private static readonly ConcurrentDictionary<Type, Type> dependencyConsolidators = new ConcurrentDictionary<Type, Type>();
+        private static readonly StaticServiceRegister Registrar = new StaticServiceRegister();
+
         /// <summary>
         /// Whitelists a list of assemblies through the Reflection TypeFactory and then grabs all types and attempts to register any types that are relevant to the
         /// engine
@@ -48,7 +75,6 @@ namespace Penguin.DependencyInjection
 
                     foreach (DependencyRegistrationAttribute autoReg in t.GetCustomAttributes<DependencyRegistrationAttribute>())
                     {
-
                         if (autoReg is RegisterAttribute ra)
                         {
                             if (ra.RegisteredTypes.Length > 0)
@@ -62,7 +88,8 @@ namespace Penguin.DependencyInjection
                             {
                                 Register(t, t, null, StaticServiceRegister.GetServiceProvider(ra.Lifetime));
                             }
-                        } else if (autoReg is RegisterThroughMostDerivedAttribute rmd)
+                        }
+                        else if (autoReg is RegisterThroughMostDerivedAttribute rmd)
                         {
                             RegisterAllBaseTypes(rmd.RequestType, TypeFactory.GetMostDerivedType(t), StaticServiceRegister.GetServiceProvider(rmd.Lifetime));
                         }
@@ -76,7 +103,8 @@ namespace Penguin.DependencyInjection
 
                     if (t.ImplementsInterface(typeof(IConsolidateDependencies<>)))
                     {
-                        foreach(Type type in t.GetClosedImplementationsFor(typeof(IConsolidateDependencies<>))) {
+                        foreach (Type type in t.GetClosedImplementationsFor(typeof(IConsolidateDependencies<>)))
+                        {
                             dependencyConsolidators.TryAdd(type.GetGenericArguments()[0], t);
                         }
                     }
@@ -138,26 +166,6 @@ namespace Penguin.DependencyInjection
             }
 
             return toReturn;
-        }
-
-        private static ConcurrentDictionary<Type, Type> dependencyConsolidators = new ConcurrentDictionary<Type, Type>();
-
-        /// <summary>
-        /// Returns a copy of the internal dependency consolidator list
-        /// </summary>
-        public static Dictionary<Type, Type> DependencyConsolidators
-        {
-            get
-            {
-                Dictionary<Type, Type> toReturn = new Dictionary<Type, Type>(dependencyConsolidators.Count);
-
-                foreach(KeyValuePair<Type, Type> consolidator in dependencyConsolidators)
-                {
-                    toReturn.Add(consolidator.Key, consolidator.Value);
-                }
-
-                return toReturn;
-            }
         }
 
         /// <summary>
@@ -238,12 +246,6 @@ namespace Penguin.DependencyInjection
 
             AllProviders.Add(serviceProvider.GetType(), serviceProvider);
         }
-
-        internal static ConcurrentDictionary<Type, List<PropertyInfo>> ChildDependancies { get; set; }
-        internal static ConcurrentDictionary<Type, ConcurrentList<Registration>> Registrations { get; set; }
-        internal static IDictionary<Type, AbstractServiceProvider> StaticProviders { get; set; } = new ConcurrentDictionary<Type, AbstractServiceProvider>();
-        internal IDictionary<Type, AbstractServiceProvider> AllProviders { get; set; } = new ConcurrentDictionary<Type, AbstractServiceProvider>();
-        internal IDictionary<Type, AbstractServiceProvider> ScopedProviders { get; set; } = new Dictionary<Type, AbstractServiceProvider>();
 
         internal static bool AnyRegistration(Type t)
         {
@@ -448,8 +450,5 @@ namespace Penguin.DependencyInjection
                 }
             }
         }
-
-        private static ConcurrentDictionary<Type, bool> ResolvableTypes { get; set; } = new ConcurrentDictionary<Type, bool>();
-        private const string WrongServiceProviderMessage = "Service provider must inherit from either abstract or scoped";
     }
 }

@@ -28,6 +28,13 @@ namespace Penguin.DependencyInjection.Objects
         public bool IsReadOnly => false;
 
         /// <summary>
+        /// The backing object for this collection
+        /// </summary>
+        protected List<T> Backing { get; }
+
+        private object ListLock { get; set; }
+
+        /// <summary>
         /// Constucts a new instance of this class
         /// </summary>
         public ConcurrentList()
@@ -202,12 +209,5 @@ namespace Penguin.DependencyInjection.Objects
                 ((IList<T>)this.Backing).RemoveAt(index);
             }
         }
-
-        /// <summary>
-        /// The backing object for this collection
-        /// </summary>
-        protected List<T> Backing { get; }
-
-        private object ListLock { get; set; }
     }
 }

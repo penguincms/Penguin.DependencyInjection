@@ -13,6 +13,10 @@ namespace Penguin.DependencyInjection.ServiceScopes
         /// </summary>
         public IServiceProvider ServiceProvider { get; set; }
 
+        private static Engine Engine { get; set; }
+
+        private bool disposedValue = false;
+
         /// <summary>
         /// Creates a new instance of this service scope.
         /// </summary>
@@ -58,9 +62,7 @@ namespace Penguin.DependencyInjection.ServiceScopes
             }
         }
 
-        private static Engine Engine { get; set; }
-
-        private bool disposedValue = false; // To detect redundant calls
+        // To detect redundant calls
 
         // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
         // ~StaticServiceScope()

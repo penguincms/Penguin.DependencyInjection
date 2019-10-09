@@ -11,14 +11,19 @@ namespace Penguin.DependencyInjection.Objects
     public class ResolutionPackage
     {
         /// <summary>
+        /// The dependency consolidators instantiated as part of this resolution stack
+        /// </summary>
+        internal Dictionary<Type, object> DependencyConsolidators { get; } = new Dictionary<Type, object>();
+
+        /// <summary>
         /// A registration stack optionally used to detect circular references
         /// </summary>
-        public Stack<Registration> RegistrationStack { get; } = new Stack<Registration>();
+        internal Stack<Registration> RegistrationStack { get; } = new Stack<Registration>();
 
         /// <summary>
         /// The collection of service providers to be used
         /// </summary>
-        public IDictionary<Type, AbstractServiceProvider> ServiceProviders { get; }
+        internal IDictionary<Type, AbstractServiceProvider> ServiceProviders { get; }
 
         /// <summary>
         /// Constructs a new instance of the resolution package

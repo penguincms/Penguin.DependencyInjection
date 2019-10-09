@@ -527,6 +527,11 @@
             The collection of service providers to be used
             </summary>
         </member>
+        <member name="P:Penguin.DependencyInjection.Objects.ResolutionPackage.DependencyConsolidators">
+            <summary>
+            The dependency consolidators instantiated as part of this resolution stack
+            </summary>
+        </member>
         <member name="M:Penguin.DependencyInjection.Objects.ResolutionPackage.#ctor(System.Collections.Generic.IDictionary{System.Type,Penguin.DependencyInjection.ServiceProviders.AbstractServiceProvider})">
             <summary>
             Constructs a new instance of the resolution package

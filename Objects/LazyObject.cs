@@ -25,6 +25,12 @@ namespace Penguin.DependencyInjection.Objects
             }
         }
 
+        internal virtual T _value { get; set; }
+
+        internal virtual Func<T> LoadMe { get; set; }
+
+        private bool Loaded { get; set; }
+
         /// <summary>
         /// Constructs a new instance of this object using the Func as the data source
         /// </summary>
@@ -42,11 +48,5 @@ namespace Penguin.DependencyInjection.Objects
         {
             this.LoadMe = new Func<T>(() => { return ServiceProvider.GetService<T>(); });
         }
-
-        internal virtual T _value { get; set; }
-
-        internal virtual Func<T> LoadMe { get; set; }
-
-        private bool Loaded { get; set; }
     }
 }

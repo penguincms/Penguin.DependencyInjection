@@ -32,6 +32,10 @@ namespace Penguin.DependencyInjection.Objects
             }
         }
 
+        private T _Value { get; set; }
+
+        private bool IsLoaded { get; set; }
+
         /// <summary>
         /// Constructs a new instance of this object
         /// </summary>
@@ -39,9 +43,5 @@ namespace Penguin.DependencyInjection.Objects
         public LazyDependency(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
-
-        private T _Value { get; set; }
-
-        private bool IsLoaded { get; set; }
     }
 }

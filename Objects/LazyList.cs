@@ -10,6 +10,23 @@ namespace Penguin.DependencyInjection.Objects
     /// <typeparam name="T">Any type</typeparam>
     public class LazyLoadCollection<T> : IEnumerable<T>
     {
+        internal virtual List<T> BackingObject
+        {
+            get
+            {
+                if (this.LoadedObject == null)
+                {
+                    this.LoadedObject = this.LoadMe.Invoke() ?? new List<T>();
+                }
+
+                return this.LoadedObject;
+            }
+        }
+
+        internal virtual List<T> LoadedObject { get; set; }
+
+        internal virtual Func<List<T>> LoadMe { get; set; }
+
         /// <summary>
         /// Constructs a new instance of this object
         /// </summary>
@@ -26,21 +43,5 @@ namespace Penguin.DependencyInjection.Objects
         public IEnumerator<T> GetEnumerator() => this.BackingObject.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => this.BackingObject.GetEnumerator();
-
-        internal virtual List<T> BackingObject
-        {
-            get
-            {
-                if (this.LoadedObject == null)
-                {
-                    this.LoadedObject = this.LoadMe.Invoke() ?? new List<T>();
-                }
-
-                return this.LoadedObject;
-            }
-        }
-
-        internal virtual List<T> LoadedObject { get; set; }
-        internal virtual Func<List<T>> LoadMe { get; set; }
     }
 }
