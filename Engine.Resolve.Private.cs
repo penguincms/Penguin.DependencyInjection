@@ -119,7 +119,7 @@ namespace Penguin.DependencyInjection
             //doesn't need to accept an IEnumerable of the types
             if (DependencyConsolidators.TryGetValue(t, out Type consolidatorType))
             {
-                if (resolutionPackage.DependencyConsolidators.TryGetValue(consolidatorType, out object consolidatedObject))
+                if (resolutionPackage.DependencyConsolidators.TryGetValue(t, out object consolidatedObject))
                 {
                     return consolidatedObject;
                 }
