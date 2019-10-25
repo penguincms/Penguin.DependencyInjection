@@ -1,7 +1,6 @@
 Penguin.Cms.Email.DependencyInjection
 Penguin.Cms.Web
 Penguin.Messaging.DependencyInjection
-Penguin.Persistence.Repositories.DependencyInjection
 Penguin.Web.DependencyInjection
 Penguin.Web.Mvc.DependencyInjection
 Penguin.Workers.Harness
