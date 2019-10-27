@@ -8,8 +8,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
-    <PackageReference Include="Penguin.DependencyInjection.Abstractions" Version="2.1.5-63707648343" />
-    <PackageReference Include="Penguin.Reflection" Version="4.0.8-63707652289" />
-    <PackageReference Include="Penguin.Reflection.Extensions" Version="3.0.4-63707653241" />
+    <PackageReference Include="Penguin.Reflection" Version="4.0.8-T9LXGUJ" />
+    <PackageReference Include="Penguin.Reflection.Extensions" Version="3.0.4-T9LXGUJ" />
+    <PackageReference Include="Penguin.DependencyInjection.Abstractions" Version="2.1.5-T9LXGUJ" />
   </ItemGroup>
 </Project>
