@@ -146,6 +146,17 @@ namespace Penguin.DependencyInjection
         }
 
         /// <summary>
+        /// Creates an instance of the engine and copies the providers from the resolution package
+        /// </summary>
+        public Engine(ResolutionPackage resolutionPackage)
+        {
+            foreach (KeyValuePair<Type, AbstractServiceProvider> provider in resolutionPackage.ServiceProviders)
+            {
+                AllProviders.Add(provider.Key, provider.Value);
+            }
+        }
+
+        /// <summary>
         /// Creates a clone of the current registrations and returns it.
         /// </summary>
         /// <returns>A clone of the current registrations</returns>
@@ -258,7 +269,7 @@ namespace Penguin.DependencyInjection
 
             if (registration.InjectionFactory != null)
             {
-                toReturn = registration.InjectionFactory.Invoke(Resolve<IServiceProvider>(resolutionPackage) ?? new Engine());
+                toReturn = registration.InjectionFactory.Invoke(Resolve<IServiceProvider>(resolutionPackage) ?? new Engine(resolutionPackage));
             }
             else if (registration.ToInstantiate != null && (!registration.ToInstantiate.IsInterface && !registration.ToInstantiate.IsAbstract))
             {
@@ -313,7 +324,7 @@ namespace Penguin.DependencyInjection
 
                 foreach (ParameterInfo thisParameter in Parameters)
                 {
-                    if (!IsResolvable(thisParameter.ParameterType) && !thisParameter.IsOptional)
+                    if (!IsResolvable(thisParameter.ParameterType, resolutionPackage) && !thisParameter.IsOptional)
                     {
                         IsMatch = false;
                         break;
@@ -369,11 +380,16 @@ namespace Penguin.DependencyInjection
             }
         }
 
-        internal static bool IsResolvable(Type t)
+        internal static bool IsResolvable(Type t, ResolutionPackage resolutionPackage)
         {
             if (ResolvableTypes.TryGetValue(t, out bool toReturn))
             {
                 return toReturn;
+            }
+
+            if (resolutionPackage.ResolutionPackageServices.ContainsKey(t))
+            {
+                return true;
             }
 
             bool alreadyResolvable = IsValidIEnumerable(t) || ResolveType(t).Any();

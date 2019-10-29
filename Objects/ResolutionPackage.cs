@@ -20,6 +20,8 @@ namespace Penguin.DependencyInjection.Objects
         /// </summary>
         internal Stack<Registration> RegistrationStack { get; } = new Stack<Registration>();
 
+        internal IDictionary<Type, object> ResolutionPackageServices { get; } = new Dictionary<Type, object>();
+
         /// <summary>
         /// The collection of service providers to be used
         /// </summary>
@@ -32,6 +34,7 @@ namespace Penguin.DependencyInjection.Objects
         public ResolutionPackage(IDictionary<Type, AbstractServiceProvider> serviceProviders)
         {
             ServiceProviders = serviceProviders;
+            ResolutionPackageServices.Add(this.GetType(), this);
         }
 
         internal void AddStack(Registration match)
