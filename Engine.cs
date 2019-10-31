@@ -421,9 +421,19 @@ namespace Penguin.DependencyInjection
             return toReturn;
         }
 
-        internal static bool IsValidIEnumerable(Type t)
+        internal static bool IsValidIEnumerable(Type t) => IsValidIEnumerable(t, out Type _);
+
+        internal static bool IsValidIEnumerable(Type t, out Type collectionType)
         {
-            return (typeof(IEnumerable).IsAssignableFrom(t) && !typeof(IQueryable).IsAssignableFrom(t) && t != typeof(string));
+            bool isIEnumerable = typeof(IEnumerable).IsAssignableFrom(t);
+            bool isQueryable = typeof(IQueryable).IsAssignableFrom(t);
+            bool isString = t == typeof(string);
+
+            collectionType = t.GetCollectionType();
+
+            bool isListable = collectionType != null && t.IsAssignableFrom(typeof(List<>).MakeGenericType(collectionType));
+
+            return isIEnumerable && !isQueryable && !isString && isListable;
         }
 
         internal static IEnumerable<Registration> ResolveType(Type t)

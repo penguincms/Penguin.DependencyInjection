@@ -63,17 +63,9 @@ namespace Penguin.DependencyInjection
                 return null;
             }
 
-            Type collectionType = t.GetCollectionType();
-            Type listType = null;
-
-            if (collectionType != null)
+            if (IsValidIEnumerable(t, out Type collectionType))
             {
-                listType = typeof(List<>).MakeGenericType(collectionType);
-            }
-
-            if (listType != null && t.IsAssignableFrom(listType))
-            {
-                IList toReturn = (IList)Activator.CreateInstance(listType);
+                IList toReturn = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(collectionType));
 
                 foreach (object thisItem in ResolveMany(t, resolutionPackage))
                 {
