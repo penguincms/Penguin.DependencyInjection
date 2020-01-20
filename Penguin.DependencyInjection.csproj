@@ -9,9 +9,9 @@
     <RootNamespace>Penguin.DependencyInjection</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
-    <PackageReference Include="Penguin.Reflection.Extensions" Version="3.0.5-T9MJL4F" />
-    <PackageReference Include="Penguin.DependencyInjection.Abstractions" Version="2.1.6-T9MJL4F" />
-    <PackageReference Include="Penguin.Reflection" Version="4.0.9-T9MJL4F" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.1" />
+    <PackageReference Include="Penguin.Reflection.Extensions" Version="3.0.5-T9QC72V" />
+    <PackageReference Include="Penguin.DependencyInjection.Abstractions" Version="2.1.6-T9QC72V" />
+    <PackageReference Include="Penguin.Reflection" Version="4.0.9-T9QC72V" />
   </ItemGroup>
 </Project>
