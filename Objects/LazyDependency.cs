@@ -18,23 +18,23 @@ namespace Penguin.DependencyInjection.Objects
             {
                 if (!this.IsLoaded)
                 {
-                    this._Value = ServiceProvider.GetService<T>();
+                    this.value = this.ServiceProvider.GetService<T>();
                     this.IsLoaded = true;
                 }
 
-                return this._Value;
+                return this.value;
             }
             set
             {
                 this.IsLoaded = true;
 
-                this._Value = value;
+                this.value = value;
             }
         }
 
-        private T _Value { get; set; }
+        private T value;
 
-        private bool IsLoaded { get; set; }
+        private bool IsLoaded;
 
         /// <summary>
         /// Constructs a new instance of this object

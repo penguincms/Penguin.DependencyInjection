@@ -10,7 +10,7 @@ namespace Penguin.DependencyInjection.Objects
     /// <typeparam name="TValue">The Value Type of the dictionary</typeparam>
     public class LazyDictionary<TKey, TValue> : Dictionary<TKey, TValue> where TValue : class
     {
-        private Func<TKey, TValue> loadMe;
+        private readonly Func<TKey, TValue> loadMe;
 
         /// <summary>
         /// Constructs a new instance of this object

@@ -3,7 +3,6 @@ using Penguin.DependencyInjection.Abstractions.Interfaces;
 using Penguin.DependencyInjection.Interfaces;
 using Penguin.DependencyInjection.Objects;
 using Penguin.DependencyInjection.ServiceProviders;
-using Penguin.Reflection.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -54,7 +53,10 @@ namespace Penguin.DependencyInjection
             return toReturn;
         }
 
-        private static T Resolve<T>(ResolutionPackage resolutionPackage) where T : class => Resolve(typeof(T), resolutionPackage) as T;
+        private static T Resolve<T>(ResolutionPackage resolutionPackage) where T : class
+        {
+            return Resolve(typeof(T), resolutionPackage) as T;
+        }
 
         private static object Resolve(Type t, ResolutionPackage resolutionPackage, bool optional = false)
         {

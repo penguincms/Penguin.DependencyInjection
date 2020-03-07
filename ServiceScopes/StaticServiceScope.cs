@@ -8,14 +8,14 @@ namespace Penguin.DependencyInjection.ServiceScopes
     /// </summary>
     public class StaticServiceScope : IServiceScope
     {
+        private bool disposedValue = false;
+
         /// <summary>
         /// Unused
         /// </summary>
         public IServiceProvider ServiceProvider { get; set; }
 
         private static Engine Engine { get; set; }
-
-        private bool disposedValue = false;
 
         /// <summary>
         /// Creates a new instance of this service scope.
@@ -27,7 +27,7 @@ namespace Penguin.DependencyInjection.ServiceScopes
                 Engine = new Engine();
             }
 
-            ServiceProvider = Engine;
+            this.ServiceProvider = Engine;
         }
 
         // This code added to correctly implement the disposable pattern.
@@ -37,7 +37,7 @@ namespace Penguin.DependencyInjection.ServiceScopes
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
+            this.Dispose(true);
             // TODO: uncomment the following line if the finalizer is overridden above.
             GC.SuppressFinalize(this);
         }
@@ -48,7 +48,7 @@ namespace Penguin.DependencyInjection.ServiceScopes
         /// <param name="disposing">Unused</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!this.disposedValue)
             {
                 if (disposing)
                 {
@@ -58,7 +58,7 @@ namespace Penguin.DependencyInjection.ServiceScopes
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
 
-                disposedValue = true;
+                this.disposedValue = true;
             }
         }
 
@@ -75,7 +75,7 @@ namespace Penguin.DependencyInjection.ServiceScopes
         /// </summary>
         ~StaticServiceScope()
         {
-            Dispose(false);
+            this.Dispose(false);
         }
     }
 }

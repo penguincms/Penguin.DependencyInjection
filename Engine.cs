@@ -21,6 +21,12 @@ namespace Penguin.DependencyInjection
 {
     public partial class Engine : IServiceProvider
     {
+        private const string WRONG_SERVICE_PROVIDER_MESSAGE = "Service provider must inherit from either abstract or scoped";
+
+        private static readonly ConcurrentDictionary<Type, Type> dependencyConsolidators = new ConcurrentDictionary<Type, Type>();
+
+        private static readonly StaticServiceRegister Registrar = new StaticServiceRegister();
+
         /// <summary>
         /// Returns a copy of the internal dependency consolidator list
         /// </summary>
@@ -50,9 +56,6 @@ namespace Penguin.DependencyInjection
         internal IDictionary<Type, AbstractServiceProvider> AllProviders { get; set; } = new ConcurrentDictionary<Type, AbstractServiceProvider>();
         internal IDictionary<Type, AbstractServiceProvider> ScopedProviders { get; set; } = new Dictionary<Type, AbstractServiceProvider>();
         private static ConcurrentDictionary<Type, bool> ResolvableTypes { get; set; } = new ConcurrentDictionary<Type, bool>();
-        private const string WrongServiceProviderMessage = "Service provider must inherit from either abstract or scoped";
-        private static readonly ConcurrentDictionary<Type, Type> dependencyConsolidators = new ConcurrentDictionary<Type, Type>();
-        private static readonly StaticServiceRegister Registrar = new StaticServiceRegister();
 
         /// <summary>
         /// Whitelists a list of assemblies through the Reflection TypeFactory and then grabs all types and attempts to register any types that are relevant to the
@@ -141,7 +144,7 @@ namespace Penguin.DependencyInjection
 
             foreach (KeyValuePair<Type, AbstractServiceProvider> provider in StaticProviders)
             {
-                AllProviders.Add(provider);
+                this.AllProviders.Add(provider);
             }
         }
 
@@ -152,7 +155,7 @@ namespace Penguin.DependencyInjection
         {
             foreach (KeyValuePair<Type, AbstractServiceProvider> provider in resolutionPackage.ServiceProviders)
             {
-                AllProviders.Add(provider.Key, provider.Value);
+                this.AllProviders.Add(provider.Key, provider.Value);
             }
         }
 
@@ -184,7 +187,10 @@ namespace Penguin.DependencyInjection
         /// </summary>
         /// <param name="t">The type to check for</param>
         /// <returns>Whether or not the type is registered as an injection target</returns>
-        public static bool IsRegistered(Type t) => Registrations.ContainsKey(t);
+        public static bool IsRegistered(Type t)
+        {
+            return Registrations.ContainsKey(t);
+        }
 
         /// <summary>
         /// Try-Gets a list of registrations from the registration collection
@@ -192,7 +198,10 @@ namespace Penguin.DependencyInjection
         /// <param name="t">The type to check for</param>
         /// <param name="outT">If found, the return collection</param>
         /// <returns>Whether or not the type is registered as an injection target</returns>
-        public static bool IsRegistered(Type t, out ConcurrentList<Registration> outT) => Registrations.TryGetValue(t, out outT);
+        public static bool IsRegistered(Type t, out ConcurrentList<Registration> outT)
+        {
+            return Registrations.TryGetValue(t, out outT);
+        }
 
         /// <summary>
         /// Resolves child properties of an object through the engine
@@ -248,14 +257,14 @@ namespace Penguin.DependencyInjection
             }
             else if (serviceProvider is ScopedServiceProvider)
             {
-                ScopedProviders.Add(serviceProvider.GetType(), serviceProvider as ScopedServiceProvider);
+                this.ScopedProviders.Add(serviceProvider.GetType(), serviceProvider as ScopedServiceProvider);
             }
             else
             {
-                throw new ArgumentException(WrongServiceProviderMessage);
+                throw new ArgumentException(WRONG_SERVICE_PROVIDER_MESSAGE);
             }
 
-            AllProviders.Add(serviceProvider.GetType(), serviceProvider);
+            this.AllProviders.Add(serviceProvider.GetType(), serviceProvider);
         }
 
         internal static bool AnyRegistration(Type t)
@@ -316,7 +325,7 @@ namespace Penguin.DependencyInjection
         {
             ConstructorInfo[] Constructors = registration.ToInstantiate.GetConstructors();
 
-            foreach (ConstructorInfo thisConstructor in Constructors.OrderByDescending(c => c.GetParameters().Count()))
+            foreach (ConstructorInfo thisConstructor in Constructors.OrderByDescending(c => c.GetParameters().Length))
             {
                 ParameterInfo[] Parameters = thisConstructor.GetParameters();
 
@@ -421,7 +430,10 @@ namespace Penguin.DependencyInjection
             return toReturn;
         }
 
-        internal static bool IsValidIEnumerable(Type t) => IsValidIEnumerable(t, out Type _);
+        internal static bool IsValidIEnumerable(Type t)
+        {
+            return IsValidIEnumerable(t, out Type _);
+        }
 
         internal static bool IsValidIEnumerable(Type t, out Type collectionType)
         {

@@ -23,7 +23,7 @@ namespace Penguin.DependencyInjection.ServiceProviders
         {
             Contract.Requires(o != null);
 
-            Add(o.GetType(), o);
+            this.Add(o.GetType(), o);
         }
 
         /// <summary>

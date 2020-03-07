@@ -13,7 +13,10 @@ namespace Penguin.DependencyInjection
         /// </summary>
         /// <typeparam name="T">The type to check for</typeparam>
         /// <returns> if theres an existing registration for this type</returns>
-        public static bool IsRegistered<T>() => Engine.IsRegistered(typeof(T));
+        public static bool IsRegistered<T>()
+        {
+            return Engine.IsRegistered(typeof(T));
+        }
 
         /// <summary>
         /// Creates a permanent type mapping for the registration and adds it to the cache
@@ -22,7 +25,10 @@ namespace Penguin.DependencyInjection
         /// <param name="x">The Created</param>
         /// <param name="injectionFactory">using method</param>
         /// <param name="lifetimeManager">With this scope</param>
-        public static void Register(Type y, Type x, Func<IServiceProvider, object> injectionFactory = null, Type lifetimeManager = null) => AddRegistration(GenerateRegistration(y, x, injectionFactory, lifetimeManager));
+        public static void Register(Type y, Type x, Func<IServiceProvider, object> injectionFactory = null, Type lifetimeManager = null)
+        {
+            AddRegistration(GenerateRegistration(y, x, injectionFactory, lifetimeManager));
+        }
 
         /// <summary>
         /// Registers a type using the specified lifetime manager
@@ -30,7 +36,10 @@ namespace Penguin.DependencyInjection
         /// <typeparam name="TRegister">The type to register</typeparam>
         /// <typeparam name="TReturn">The type to return</typeparam>
         /// <param name="lifetimeManager">The type of the ServiceProvider to use for resolution</param>
-        public static void Register<TRegister, TReturn>(Type lifetimeManager = null) where TReturn : TRegister => Engine.Register(typeof(TRegister), typeof(TReturn), lifetimeManager);
+        public static void Register<TRegister, TReturn>(Type lifetimeManager = null) where TReturn : TRegister
+        {
+            Engine.Register(typeof(TRegister), typeof(TReturn), lifetimeManager);
+        }
 
         /// <summary>
         /// Registers a type using the specified lifetime manager
@@ -38,7 +47,10 @@ namespace Penguin.DependencyInjection
         /// <param name="y">The type to register</param>
         /// <param name="x">The type to return</param>
         /// <param name="lifetimeManager">The type of the ServiceProvider to use for resolution</param>
-        public static void Register(Type y, Type x, Type lifetimeManager = null) => Engine.Register(y, x, null, lifetimeManager);
+        public static void Register(Type y, Type x, Type lifetimeManager = null)
+        {
+            Engine.Register(y, x, null, lifetimeManager);
+        }
 
         /// <summary>
         /// Registers a type with a func to provide an instance later
@@ -46,7 +58,10 @@ namespace Penguin.DependencyInjection
         /// <typeparam name="TRegister">The type to register</typeparam>
         /// <param name="injectionFactory">The func to create an instance of the object</param>
         /// <param name="lifetimeManager">The type of ServiceProvider that should store the creaete instance</param>
-        public static void Register<TRegister>(Func<IServiceProvider, TRegister> injectionFactory, Type lifetimeManager = null) => Engine.Register(typeof(TRegister), (serviceProvider) => injectionFactory.Invoke(serviceProvider), lifetimeManager);
+        public static void Register<TRegister>(Func<IServiceProvider, TRegister> injectionFactory, Type lifetimeManager = null)
+        {
+            Engine.Register(typeof(TRegister), (serviceProvider) => injectionFactory.Invoke(serviceProvider), lifetimeManager);
+        }
 
         /// <summary>
         /// Registers a type with a func to provide an instance later
@@ -54,7 +69,10 @@ namespace Penguin.DependencyInjection
         /// <param name="y">The type to register</param>
         /// <param name="injectionFactory">The func to create an instance of the object</param>
         /// <param name="lifetimeManager">The type of ServiceProvider that should store the creaete instance</param>
-        public static void Register(Type y, Func<IServiceProvider, object> injectionFactory, Type lifetimeManager = null) => Engine.Register(y, null, injectionFactory, lifetimeManager);
+        public static void Register(Type y, Func<IServiceProvider, object> injectionFactory, Type lifetimeManager = null)
+        {
+            Engine.Register(y, null, injectionFactory, lifetimeManager);
+        }
 
         /// <summary>
         /// Registers all types between the two given types (in a heiararchy) to resolve to the first type (inclusive)
@@ -90,7 +108,10 @@ namespace Penguin.DependencyInjection
         /// <typeparam name="TDerived">The most derived type in the stack</typeparam>
         /// <typeparam name="TInherited">The least derived type in the stack</typeparam>
         /// <param name="lifetimeManager">The type of the ServiceProvider to use for resolution</param>
-        public static void RegisterAllBaseTypes<TDerived, TInherited>(Type lifetimeManager = null) where TInherited : TDerived => Engine.RegisterAllBaseTypes(typeof(TDerived), typeof(TInherited), lifetimeManager);
+        public static void RegisterAllBaseTypes<TDerived, TInherited>(Type lifetimeManager = null) where TInherited : TDerived
+        {
+            Engine.RegisterAllBaseTypes(typeof(TDerived), typeof(TInherited), lifetimeManager);
+        }
 
         /// <summary>
         /// Registers a concrete object instance to the given provider
@@ -129,7 +150,10 @@ namespace Penguin.DependencyInjection
         /// <typeparam name="TRegister">The type to register</typeparam>
         /// <param name="o">The object instance to register</param>
         /// <param name="lifetimeManager">The type of the ServiceProvider to use for resolution</param>
-        public static void RegisterInstance<TRegister>(object o, Type lifetimeManager = null) => Engine.RegisterInstance(typeof(TRegister), o, lifetimeManager);
+        public static void RegisterInstance<TRegister>(object o, Type lifetimeManager = null)
+        {
+            Engine.RegisterInstance(typeof(TRegister), o, lifetimeManager);
+        }
 
         /// <summary>
         /// Registers all parent types of the given object to the specified instance
@@ -168,7 +192,10 @@ namespace Penguin.DependencyInjection
         /// </summary>
         /// <typeparam name="T">The type to remove</typeparam>
         /// <returns>Whether or not the unregistration was a success</returns>
-        public static bool Unregister<T>() => Unregister(typeof(T));
+        public static bool Unregister<T>()
+        {
+            return Unregister(typeof(T));
+        }
 
         internal static void AddRegistration(Registration dr)
         {

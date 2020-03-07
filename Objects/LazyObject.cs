@@ -18,14 +18,14 @@ namespace Penguin.DependencyInjection.Objects
             {
                 if (!this.Loaded)
                 {
-                    this._value = this.LoadMe.Invoke();
+                    this.value = this.LoadMe.Invoke();
                 }
 
-                return this._value;
+                return this.value;
             }
         }
 
-        internal virtual T _value { get; set; }
+        private T value;
 
         internal virtual Func<T> LoadMe { get; set; }
 
@@ -46,7 +46,7 @@ namespace Penguin.DependencyInjection.Objects
         /// <param name="serviceProvider">A service provider configured to return an instance of the requested object</param>
         public LazyObject(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            this.LoadMe = new Func<T>(() => { return ServiceProvider.GetService<T>(); });
+            this.LoadMe = new Func<T>(() => { return this.ServiceProvider.GetService<T>(); });
         }
     }
 }

@@ -11,19 +11,19 @@ namespace Penguin.DependencyInjection
         /// <summary>
         /// A Func to be used when creating the instance
         /// </summary>
-        public Func<IServiceProvider, object> InjectionFactory { get { return _InjectionFactory; } set { _InjectionFactory = value; } }
+        public Func<IServiceProvider, object> InjectionFactory { get => this._InjectionFactory; set => this._InjectionFactory = value; }
 
         /// <summary>
         /// The "Key" type defining what request type this registration applies to
         /// </summary>
         public Type RegisteredType
         {
-            get { return _RegisteredType; }
+            get => this._RegisteredType;
             set
             {
-                _RegisteredType = value;
+                this._RegisteredType = value;
 #if DEBUG
-                RegisteredTypeName = value?.ToString();
+                this.RegisteredTypeName = value?.ToString();
 #endif
             }
         }
@@ -33,12 +33,12 @@ namespace Penguin.DependencyInjection
         /// </summary>
         public Type ServiceProvider
         {
-            get { return _ServiceProvider ?? typeof(TransientServiceProvider); }
+            get => this._ServiceProvider ?? typeof(TransientServiceProvider);
             set
             {
-                _ServiceProvider = value;
+                this._ServiceProvider = value;
 #if DEBUG
-                ServiceProviderName = value?.ToString();
+                this.ServiceProviderName = value?.ToString();
 #endif
             }
         }
@@ -48,12 +48,12 @@ namespace Penguin.DependencyInjection
         /// </summary>
         public Type ToInstantiate
         {
-            get { return _ToInstantiate ?? _RegisteredType; }
+            get => this._ToInstantiate ?? this._RegisteredType;
             set
             {
-                _ToInstantiate = value;
+                this._ToInstantiate = value;
 #if DEBUG
-                ToInstantiateName = value?.ToString();
+                this.ToInstantiateName = value?.ToString();
 #endif
             }
         }

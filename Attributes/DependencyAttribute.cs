@@ -24,7 +24,7 @@ namespace Penguin.DependencyInjection.Attributes
         /// <param name="defaultType">The type to resolve this property to if no registrations are found</param>
         public DependencyAttribute(Type defaultType) : this(true)
         {
-            Default = defaultType;
+            this.Default = defaultType;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Penguin.DependencyInjection.Attributes
         /// <param name="findService">Dont set this because I dont know what it does</param>
         public DependencyAttribute(bool findService = false)
         {
-            FindService = findService;
+            this.FindService = findService;
         }
     }
 }

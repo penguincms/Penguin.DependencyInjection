@@ -9,6 +9,8 @@ namespace Penguin.DependencyInjection.ServiceScopes
     /// </summary>
     public class ScopedServiceScope : IServiceScope
     {
+        private bool disposedValue = false;
+
         /// <summary>
         /// The Scoped Service Provider that will be handling this Scope
         /// </summary>
@@ -19,8 +21,6 @@ namespace Penguin.DependencyInjection.ServiceScopes
         /// </summary>
         public IServiceProvider ServiceProvider { get; set; }
 
-        private bool disposedValue = false;
-
         /// <summary>
         /// Constructs a new instance of this scope, and sets the internal DI to a new instance with a registered scope provider
         /// </summary>
@@ -28,14 +28,14 @@ namespace Penguin.DependencyInjection.ServiceScopes
         {
             Engine engine = new Engine();
 
-            RequestProvider = new ScopedServiceProvider();
+            this.RequestProvider = new ScopedServiceProvider();
 
-            engine.Register(RequestProvider);
+            engine.Register(this.RequestProvider);
 
-            RequestProvider.Add(engine);
-            RequestProvider.Add(typeof(IServiceProvider), engine);
+            this.RequestProvider.Add(engine);
+            this.RequestProvider.Add(typeof(IServiceProvider), engine);
 
-            ServiceProvider = engine;
+            this.ServiceProvider = engine;
         }
 
         // This code added to correctly implement the disposable pattern.
@@ -45,7 +45,7 @@ namespace Penguin.DependencyInjection.ServiceScopes
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
+            this.Dispose(true);
             // TODO: uncomment the following line if the finalizer is overridden above.
             GC.SuppressFinalize(this);
         }
@@ -56,18 +56,18 @@ namespace Penguin.DependencyInjection.ServiceScopes
         /// <param name="disposing">True if clear managed</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!this.disposedValue)
             {
                 if (disposing)
                 {
-                    RequestProvider.Clear();
-                    RequestProvider = null;
+                    this.RequestProvider.Clear();
+                    this.RequestProvider = null;
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
 
-                disposedValue = true;
+                this.disposedValue = true;
             }
         }
 
@@ -84,7 +84,7 @@ namespace Penguin.DependencyInjection.ServiceScopes
         /// </summary>
         ~ScopedServiceScope()
         {
-            Dispose(false);
+            this.Dispose(false);
         }
     }
 }
