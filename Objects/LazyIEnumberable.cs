@@ -9,18 +9,18 @@ namespace Penguin.DependencyInjection.Objects
     /// <typeparam name="T">Any type</typeparam>
     public class LazyIEnumerable<T> where T : class
     {
-        internal virtual IEnumerable<T> _backingObject { get; set; }
+        internal IEnumerable<T> backingObject;
 
         internal virtual IEnumerable<T> BackingObject
         {
             get
             {
-                if (this._backingObject == null)
+                if (this.backingObject == null)
                 {
-                    this._backingObject = this.LoadMe.Invoke() ?? new List<T>();
+                    this.backingObject = this.LoadMe.Invoke() ?? new List<T>();
                 }
 
-                return this._backingObject;
+                return this.backingObject;
             }
         }
 

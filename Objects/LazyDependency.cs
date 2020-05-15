@@ -9,6 +9,10 @@ namespace Penguin.DependencyInjection.Objects
     /// <typeparam name="T">The type of the dependency to return</typeparam>
     public class LazyDependency<T> : LazyBase<T> where T : class
     {
+        private bool IsLoaded;
+
+        private T value;
+
         /// <summary>
         /// Returns a constructed instance of the dependency
         /// </summary>
@@ -31,10 +35,6 @@ namespace Penguin.DependencyInjection.Objects
                 this.value = value;
             }
         }
-
-        private T value;
-
-        private bool IsLoaded;
 
         /// <summary>
         /// Constructs a new instance of this object

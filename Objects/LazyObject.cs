@@ -9,6 +9,8 @@ namespace Penguin.DependencyInjection.Objects
     /// <typeparam name="T">The type of object to provide when accessed</typeparam>
     public class LazyObject<T> : LazyBase<T> where T : class
     {
+        private T value;
+
         /// <summary>
         /// Returns an object from the provided factory/provider
         /// </summary>
@@ -24,8 +26,6 @@ namespace Penguin.DependencyInjection.Objects
                 return this.value;
             }
         }
-
-        private T value;
 
         internal virtual Func<T> LoadMe { get; set; }
 
