@@ -15,7 +15,10 @@ namespace Penguin.DependencyInjection.ServiceProviders
         /// <param name="engine">The dependency injector to register</param>
         public virtual void Register(Engine engine)
         {
-            Contract.Requires(engine != null);
+            if (engine is null)
+            {
+                throw new System.ArgumentNullException(nameof(engine));
+            }
 
             engine.Register(this);
         }

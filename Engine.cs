@@ -50,7 +50,7 @@ namespace Penguin.DependencyInjection
         /// </summary>
         public static bool DetectCircularResolution { get; set; } = false;
 
-        internal static ConcurrentDictionary<Type, List<PropertyInfo>> ChildDependancies { get; set; }
+        internal static ConcurrentDictionary<Type, List<PropertyInfo>> ChildDependencies { get; set; }
         internal static ConcurrentDictionary<Type, ConcurrentList<Registration>> Registrations { get; set; }
         internal static IDictionary<Type, AbstractServiceProvider> StaticProviders { get; set; } = new ConcurrentDictionary<Type, AbstractServiceProvider>();
         internal IDictionary<Type, AbstractServiceProvider> AllProviders { get; set; } = new ConcurrentDictionary<Type, AbstractServiceProvider>();
@@ -66,7 +66,7 @@ namespace Penguin.DependencyInjection
         {
             StaticLogger.Log($"Penguin.DependencyInjection: {Assembly.GetExecutingAssembly().GetName().Version}", StaticLogger.LoggingLevel.Call);
 
-            ChildDependancies = new ConcurrentDictionary<Type, List<PropertyInfo>>();
+            ChildDependencies = new ConcurrentDictionary<Type, List<PropertyInfo>>();
             Registrations = new ConcurrentDictionary<Type, ConcurrentList<Registration>>();
 
             foreach (Type t in TypeFactory.GetAllTypes())
@@ -153,6 +153,11 @@ namespace Penguin.DependencyInjection
         /// </summary>
         public Engine(ResolutionPackage resolutionPackage)
         {
+            if (resolutionPackage is null)
+            {
+                throw new ArgumentNullException(nameof(resolutionPackage));
+            }
+
             foreach (KeyValuePair<Type, AbstractServiceProvider> provider in resolutionPackage.ServiceProviders)
             {
                 this.AllProviders.Add(provider.Key, provider.Value);
@@ -212,17 +217,19 @@ namespace Penguin.DependencyInjection
         /// <returns>The passed in object with resolved properties (just in case)</returns>
         public static T ResolveProperties<T>(T o, ResolutionPackage resolutionPackage)
         {
-            Contract.Requires(o != null);
-            Contract.Requires(resolutionPackage != null);
+            if (resolutionPackage is null)
+            {
+                throw new ArgumentNullException(nameof(resolutionPackage));
+            }
 
             Type oType = o.GetType();
 
-            if (!ChildDependancies.ContainsKey(oType))
+            if (!ChildDependencies.ContainsKey(oType))
             {
-                ChildDependancies.TryAdd(oType, oType.GetProperties().Where(p => Attribute.IsDefined(p, typeof(DependencyAttribute))).ToList());
+                ChildDependencies.TryAdd(oType, oType.GetProperties().Where(p => Attribute.IsDefined(p, typeof(DependencyAttribute))).ToList());
             }
 
-            foreach (PropertyInfo thisDependency in ChildDependancies[oType])
+            foreach (PropertyInfo thisDependency in ChildDependencies[oType])
             {
                 if (!AnyRegistration(thisDependency.PropertyType))
                 {
@@ -315,7 +322,7 @@ namespace Penguin.DependencyInjection
 
             if (!thisRegistration.ServiceProvider.IsSubclassOf(typeof(AbstractServiceProvider)))
             {
-                throw new Exception($"Attemting to add a service provider registration for non service provider type {serviceProvider.Name}");
+                throw new Exception($"Attempting to add a service provider registration for non service provider type {serviceProvider.Name}");
             }
 
             return thisRegistration;

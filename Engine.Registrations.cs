@@ -9,10 +9,10 @@ namespace Penguin.DependencyInjection
     public partial class Engine
     {
         /// <summary>
-        /// Checks if theres an existing registration for this type
+        /// Checks if there's an existing registration for this type
         /// </summary>
         /// <typeparam name="T">The type to check for</typeparam>
-        /// <returns> if theres an existing registration for this type</returns>
+        /// <returns> if there's an existing registration for this type</returns>
         public static bool IsRegistered<T>()
         {
             return Engine.IsRegistered(typeof(T));
@@ -57,7 +57,7 @@ namespace Penguin.DependencyInjection
         /// </summary>
         /// <typeparam name="TRegister">The type to register</typeparam>
         /// <param name="injectionFactory">The func to create an instance of the object</param>
-        /// <param name="lifetimeManager">The type of ServiceProvider that should store the creaete instance</param>
+        /// <param name="lifetimeManager">The type of ServiceProvider that should store the create instance</param>
         public static void Register<TRegister>(Func<IServiceProvider, TRegister> injectionFactory, Type lifetimeManager = null)
         {
             Engine.Register(typeof(TRegister), (serviceProvider) => injectionFactory.Invoke(serviceProvider), lifetimeManager);
@@ -68,14 +68,14 @@ namespace Penguin.DependencyInjection
         /// </summary>
         /// <param name="y">The type to register</param>
         /// <param name="injectionFactory">The func to create an instance of the object</param>
-        /// <param name="lifetimeManager">The type of ServiceProvider that should store the creaete instance</param>
+        /// <param name="lifetimeManager">The type of ServiceProvider that should store the create instance</param>
         public static void Register(Type y, Func<IServiceProvider, object> injectionFactory, Type lifetimeManager = null)
         {
             Engine.Register(y, null, injectionFactory, lifetimeManager);
         }
 
         /// <summary>
-        /// Registers all types between the two given types (in a heiararchy) to resolve to the first type (inclusive)
+        /// Registers all types between the two given types (in a hierarchy) to resolve to the first type (inclusive)
         /// </summary>
         /// <param name="Base">The least derived type in the stack</param>
         /// <param name="Parent">The most derived type in the stack</param>
@@ -103,7 +103,7 @@ namespace Penguin.DependencyInjection
         }
 
         /// <summary>
-        /// Registers all types between the two given types (in a heiararchy) to resolve to the first type (inclusive)
+        /// Registers all types between the two given types (in a hierarchy) to resolve to the first type (inclusive)
         /// </summary>
         /// <typeparam name="TDerived">The most derived type in the stack</typeparam>
         /// <typeparam name="TInherited">The least derived type in the stack</typeparam>
@@ -116,13 +116,20 @@ namespace Penguin.DependencyInjection
         /// <summary>
         /// Registers a concrete object instance to the given provider
         /// </summary>
-        /// <param name="y">The tyoe to register</param>
+        /// <param name="y">The type to register</param>
         /// <param name="o">The object instance to register</param>
         /// <param name="lifetimeManager">The type of the ServiceProvider to use for resolution</param>
         public static void RegisterInstance(Type y, object o, Type lifetimeManager = null)
         {
-            Contract.Requires(o != null);
-            Contract.Requires(y != null);
+            if (y is null)
+            {
+                throw new ArgumentNullException(nameof(y));
+            }
+
+            if (o is null)
+            {
+                throw new ArgumentNullException(nameof(o));
+            }
 
             if (!y.IsAssignableFrom(o.GetType()))
             {
@@ -163,8 +170,10 @@ namespace Penguin.DependencyInjection
         /// <param name="lifetimeManager">The type of the ServiceProvider to use for resolution</param>
         public static void RegisterInstanceAllBaseTypes(Type Base, object Instance, Type lifetimeManager = null)
         {
-            Contract.Requires(Instance != null);
-            Contract.Requires(Base != null);
+            if (Instance is null)
+            {
+                throw new ArgumentNullException(nameof(Instance));
+            }
 
             Type BaseType = Instance.GetType();
             do

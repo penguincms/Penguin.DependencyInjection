@@ -176,7 +176,7 @@
             <summary>
             Registers a concrete object instance to the given provider
             </summary>
-            <param name="y">The tyoe to register</param>
+            <param name="y">The type to register</param>
             <param name="o">The object instance to register</param>
             <param name="lifetimeManager">The type of the ServiceProvider to use for resolution</param>
         </member>
@@ -307,7 +307,7 @@
             <summary>
             Returns a service from a service provider by casting it to a requested type
             </summary>
-            <typeparam name="T">Type type to request</typeparam>
+            <typeparam name="T">Type to request</typeparam>
             <param name="provider">The service provider to use as a source</param>
             <returns>Any resolved object casted to the requested type</returns>
         </member>

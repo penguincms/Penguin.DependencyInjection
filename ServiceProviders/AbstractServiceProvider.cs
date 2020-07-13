@@ -21,7 +21,10 @@ namespace Penguin.DependencyInjection.ServiceProviders
         /// <param name="o">The object to resolve to</param>
         public void Add(object o)
         {
-            Contract.Requires(o != null);
+            if (o is null)
+            {
+                throw new ArgumentNullException(nameof(o));
+            }
 
             this.Add(o.GetType(), o);
         }
