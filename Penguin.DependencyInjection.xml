@@ -110,10 +110,10 @@
         </member>
         <member name="M:Penguin.DependencyInjection.Engine.IsRegistered``1">
             <summary>
-            Checks if theres an existing registration for this type
+            Checks if there's an existing registration for this type
             </summary>
             <typeparam name="T">The type to check for</typeparam>
-            <returns> if theres an existing registration for this type</returns>
+            <returns> if there's an existing registration for this type</returns>
         </member>
         <member name="M:Penguin.DependencyInjection.Engine.Register(System.Type,System.Type,System.Func{System.IServiceProvider,System.Object},System.Type)">
             <summary>
@@ -146,7 +146,7 @@
             </summary>
             <typeparam name="TRegister">The type to register</typeparam>
             <param name="injectionFactory">The func to create an instance of the object</param>
-            <param name="lifetimeManager">The type of ServiceProvider that should store the creaete instance</param>
+            <param name="lifetimeManager">The type of ServiceProvider that should store the create instance</param>
         </member>
         <member name="M:Penguin.DependencyInjection.Engine.Register(System.Type,System.Func{System.IServiceProvider,System.Object},System.Type)">
             <summary>
@@ -154,11 +154,11 @@
             </summary>
             <param name="y">The type to register</param>
             <param name="injectionFactory">The func to create an instance of the object</param>
-            <param name="lifetimeManager">The type of ServiceProvider that should store the creaete instance</param>
+            <param name="lifetimeManager">The type of ServiceProvider that should store the create instance</param>
         </member>
         <member name="M:Penguin.DependencyInjection.Engine.RegisterAllBaseTypes(System.Type,System.Type,System.Type)">
             <summary>
-            Registers all types between the two given types (in a heiararchy) to resolve to the first type (inclusive)
+            Registers all types between the two given types (in a hierarchy) to resolve to the first type (inclusive)
             </summary>
             <param name="Base">The least derived type in the stack</param>
             <param name="Parent">The most derived type in the stack</param>
@@ -166,7 +166,7 @@
         </member>
         <member name="M:Penguin.DependencyInjection.Engine.RegisterAllBaseTypes``2(System.Type)">
             <summary>
-            Registers all types between the two given types (in a heiararchy) to resolve to the first type (inclusive)
+            Registers all types between the two given types (in a hierarchy) to resolve to the first type (inclusive)
             </summary>
             <typeparam name="TDerived">The most derived type in the stack</typeparam>
             <typeparam name="TInherited">The least derived type in the stack</typeparam>
