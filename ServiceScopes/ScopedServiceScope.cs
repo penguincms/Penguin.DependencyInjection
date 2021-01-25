@@ -9,7 +9,7 @@ namespace Penguin.DependencyInjection.ServiceScopes
     /// </summary>
     public class ScopedServiceScope : IServiceScope
     {
-        private bool disposedValue = false;
+        private bool disposedValue;
 
         /// <summary>
         /// The Scoped Service Provider that will be handling this Scope

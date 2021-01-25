@@ -2,7 +2,6 @@
 using Penguin.DependencyInjection.Objects;
 using Penguin.DependencyInjection.ServiceProviders;
 using System;
-using System.Diagnostics.Contracts;
 
 namespace Penguin.DependencyInjection
 {

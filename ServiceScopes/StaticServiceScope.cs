@@ -8,7 +8,7 @@ namespace Penguin.DependencyInjection.ServiceScopes
     /// </summary>
     public class StaticServiceScope : IServiceScope
     {
-        private bool disposedValue = false;
+        private bool disposedValue;
 
         /// <summary>
         /// Unused

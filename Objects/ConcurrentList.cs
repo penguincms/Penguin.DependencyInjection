@@ -8,7 +8,6 @@ namespace Penguin.DependencyInjection.Objects
     /// A Concurrent List object
     /// </summary>
     /// <typeparam name="T">Any collection type</typeparam>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "Its a List. It ends in List")]
     public class ConcurrentList<T> : IList<T>
     {
         /// <summary>
