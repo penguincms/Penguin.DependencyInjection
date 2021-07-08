@@ -23,7 +23,6 @@ namespace Penguin.DependencyInjection.Exceptions
     /// <summary>
     /// Exception that contains information needed to understand why an object was not able to be constructed
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "This class is only supposed to be constructed internally")]
     public class MissingInjectableConstructorException : Exception
     {
         /// <summary>

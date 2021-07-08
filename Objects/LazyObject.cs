@@ -46,7 +46,7 @@ namespace Penguin.DependencyInjection.Objects
         /// <param name="serviceProvider">A service provider configured to return an instance of the requested object</param>
         public LazyObject(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            this.LoadMe = new Func<T>(() => { return this.ServiceProvider.GetService<T>(); });
+            this.LoadMe = new Func<T>(() => this.ServiceProvider.GetService<T>());
         }
     }
 }
