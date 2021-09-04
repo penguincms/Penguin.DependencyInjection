@@ -13,6 +13,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.1" />
     <PackageReference Include="Penguin.DependencyInjection.Abstractions" Version="5.0.6-TAHULSY" />
     <PackageReference Include="Penguin.Reflection.Extensions" Version="5.0.6-TAHULSY" />
-    <PackageReference Include="Penguin.Reflection" Version="5.0.6-TAKDH3F" />
+    <PackageReference Include="Penguin.Reflection" Version="5.0.6-TAKOD19" />
   </ItemGroup>
 </Project>
