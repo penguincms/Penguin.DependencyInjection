@@ -53,10 +53,7 @@ namespace Penguin.DependencyInjection
             return toReturn;
         }
 
-        private static T Resolve<T>(ResolutionPackage resolutionPackage) where T : class
-        {
-            return Resolve(typeof(T), resolutionPackage) as T;
-        }
+        private static T Resolve<T>(ResolutionPackage resolutionPackage) where T : class => Resolve(typeof(T), resolutionPackage) as T;
 
         private static object Resolve(Type t, ResolutionPackage resolutionPackage, bool optional = false)
         {

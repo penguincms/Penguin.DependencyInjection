@@ -48,9 +48,6 @@ namespace Penguin.DependencyInjection.Exceptions
             this.FailedConstructors = new List<FailingConstructor>();
         }
 
-        internal void SetMessage(string message)
-        {
-            this.MessageText = message;
-        }
+        internal void SetMessage(string message) => this.MessageText = message;
     }
 }

@@ -54,9 +54,6 @@ namespace Penguin.DependencyInjection.ServiceProviders
         /// </summary>
         /// <param name="t">The registration type for the object to retrieve</param>
         /// <returns>A LIST of object instances that are part of the type registration</returns>
-        public override object GetService(Type t)
-        {
-            return this.Instances.TryGetValue(t, out List<object> instances) ? instances : new List<object>();
-        }
+        public override object GetService(Type t) => this.Instances.TryGetValue(t, out List<object> instances) ? instances : new List<object>();
     }
 }

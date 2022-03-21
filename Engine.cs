@@ -190,10 +190,7 @@ namespace Penguin.DependencyInjection
         /// </summary>
         /// <param name="t">The type to check for</param>
         /// <returns>Whether or not the type is registered as an injection target</returns>
-        public static bool IsRegistered(Type t)
-        {
-            return Registrations.ContainsKey(t);
-        }
+        public static bool IsRegistered(Type t) => Registrations.ContainsKey(t);
 
         /// <summary>
         /// Try-Gets a list of registrations from the registration collection
@@ -201,10 +198,7 @@ namespace Penguin.DependencyInjection
         /// <param name="t">The type to check for</param>
         /// <param name="outT">If found, the return collection</param>
         /// <returns>Whether or not the type is registered as an injection target</returns>
-        public static bool IsRegistered(Type t, out ConcurrentList<Registration> outT)
-        {
-            return Registrations.TryGetValue(t, out outT);
-        }
+        public static bool IsRegistered(Type t, out ConcurrentList<Registration> outT) => Registrations.TryGetValue(t, out outT);
 
         /// <summary>
         /// Resolves child properties of an object through the engine
@@ -272,10 +266,7 @@ namespace Penguin.DependencyInjection
             this.AllProviders.Add(serviceProvider.GetType(), serviceProvider);
         }
 
-        internal static bool AnyRegistration(Type t)
-        {
-            return ResolveType(t).Any();
-        }
+        internal static bool AnyRegistration(Type t) => ResolveType(t).Any();
 
         internal static object CreateRegisteredInstance(Registration registration, ResolutionPackage resolutionPackage, bool optional = false)
         {
@@ -435,10 +426,7 @@ namespace Penguin.DependencyInjection
             return toReturn;
         }
 
-        internal static bool IsValidIEnumerable(Type t)
-        {
-            return IsValidIEnumerable(t, out Type _);
-        }
+        internal static bool IsValidIEnumerable(Type t) => IsValidIEnumerable(t, out Type _);
 
         internal static bool IsValidIEnumerable(Type t, out Type collectionType)
         {
