@@ -2,7 +2,7 @@
   <Import Project="Penguin.Projects.Shared\Penguin.Projects.Shared.csproj" />
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <PackageProjectUrl>https://github.com/PenguinCMS/Penguin.DependencyInjection</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/PenguinCms/Penguin.DependencyInjection</PackageProjectUrl>
     <Version>5.0.5</Version>
     <Description>A penguin themed dependency injector fully supporting ASP.Net Core</Description>
     <AssemblyName>Penguin.DependencyInjection</AssemblyName>
