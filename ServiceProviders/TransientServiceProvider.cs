@@ -22,6 +22,9 @@ namespace Penguin.DependencyInjection.ServiceProviders
         /// </summary>
         /// <param name="t">Not used</param>
         /// <returns>Not used</returns>
-        public override object GetService(Type t) => new List<object>();
+        public override object GetService(Type t)
+        {
+            return new List<object>();
+        }
     }
 }

@@ -172,7 +172,7 @@ namespace Penguin.DependencyInjection.Objects
         {
             lock (this.ListLock)
             {
-                this.Backing.Remove(o);
+                _ = this.Backing.Remove(o);
             }
         }
 

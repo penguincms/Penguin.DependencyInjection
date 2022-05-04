@@ -106,7 +106,7 @@ namespace Penguin.DependencyInjection
                     {
                         foreach (Type type in t.GetClosedImplementationsFor(typeof(IConsolidateDependencies<>)))
                         {
-                            dependencyConsolidators.TryAdd(type.GetGenericArguments()[0], t);
+                            _ = dependencyConsolidators.TryAdd(type.GetGenericArguments()[0], t);
                         }
                     }
 
@@ -137,7 +137,7 @@ namespace Penguin.DependencyInjection
         {
             if (!SingletonServiceProvider.Instances.ContainsKey(typeof(IServiceProvider)))
             {
-                SingletonServiceProvider.Instances.TryAdd(typeof(IServiceProvider), new List<object> { this });
+                _ = SingletonServiceProvider.Instances.TryAdd(typeof(IServiceProvider), new List<object> { this });
             }
 
             foreach (KeyValuePair<Type, AbstractServiceProvider> provider in StaticProviders)
@@ -179,7 +179,7 @@ namespace Penguin.DependencyInjection
                     list.Add(r);
                 }
 
-                toReturn.TryAdd(keyValuePair.Key, list);
+                _ = toReturn.TryAdd(keyValuePair.Key, list);
             }
 
             return toReturn;
@@ -190,7 +190,10 @@ namespace Penguin.DependencyInjection
         /// </summary>
         /// <param name="t">The type to check for</param>
         /// <returns>Whether or not the type is registered as an injection target</returns>
-        public static bool IsRegistered(Type t) => Registrations.ContainsKey(t);
+        public static bool IsRegistered(Type t)
+        {
+            return Registrations.ContainsKey(t);
+        }
 
         /// <summary>
         /// Try-Gets a list of registrations from the registration collection
@@ -198,7 +201,10 @@ namespace Penguin.DependencyInjection
         /// <param name="t">The type to check for</param>
         /// <param name="outT">If found, the return collection</param>
         /// <returns>Whether or not the type is registered as an injection target</returns>
-        public static bool IsRegistered(Type t, out ConcurrentList<Registration> outT) => Registrations.TryGetValue(t, out outT);
+        public static bool IsRegistered(Type t, out ConcurrentList<Registration> outT)
+        {
+            return Registrations.TryGetValue(t, out outT);
+        }
 
         /// <summary>
         /// Resolves child properties of an object through the engine
@@ -218,7 +224,7 @@ namespace Penguin.DependencyInjection
 
             if (!ChildDependencies.ContainsKey(oType))
             {
-                ChildDependencies.TryAdd(oType, oType.GetProperties().Where(p => Attribute.IsDefined(p, typeof(DependencyAttribute))).ToList());
+                _ = ChildDependencies.TryAdd(oType, oType.GetProperties().Where(p => Attribute.IsDefined(p, typeof(DependencyAttribute))).ToList());
             }
 
             foreach (PropertyInfo thisDependency in ChildDependencies[oType])
@@ -266,7 +272,10 @@ namespace Penguin.DependencyInjection
             this.AllProviders.Add(serviceProvider.GetType(), serviceProvider);
         }
 
-        internal static bool AnyRegistration(Type t) => ResolveType(t).Any();
+        internal static bool AnyRegistration(Type t)
+        {
+            return ResolveType(t).Any();
+        }
 
         internal static object CreateRegisteredInstance(Registration registration, ResolutionPackage resolutionPackage, bool optional = false)
         {
@@ -276,14 +285,14 @@ namespace Penguin.DependencyInjection
             {
                 toReturn = registration.InjectionFactory.Invoke(Resolve<IServiceProvider>(resolutionPackage) ?? new Engine(resolutionPackage));
             }
-            else if (registration.ToInstantiate != null && (!registration.ToInstantiate.IsInterface && !registration.ToInstantiate.IsAbstract))
+            else if (registration.ToInstantiate != null && !registration.ToInstantiate.IsInterface && !registration.ToInstantiate.IsAbstract)
             {
                 toReturn = InstantiateObject(registration, resolutionPackage, optional);
             }
 
             if (toReturn != null)
             {
-                ResolveProperties(toReturn, resolutionPackage);
+                _ = ResolveProperties(toReturn, resolutionPackage);
             }
 
             return toReturn;
@@ -349,11 +358,11 @@ namespace Penguin.DependencyInjection
 
                 foreach (KeyValuePair<Type, ConcurrentList<Registration>> r in Engine.Registrations)
                 {
-                    registered.Append(r.Key.Name + System.Environment.NewLine);
+                    _ = registered.Append(r.Key.Name + System.Environment.NewLine);
 
                     foreach (Registration thisRegistration in r.Value)
                     {
-                        registered.Append($"\t{thisRegistration.RegisteredType.FullName} => {thisRegistration.ToInstantiate.FullName} as {thisRegistration.ServiceProvider.FullName}");
+                        _ = registered.Append($"\t{thisRegistration.RegisteredType.FullName} => {thisRegistration.ToInstantiate.FullName} as {thisRegistration.ServiceProvider.FullName}");
                     }
                 }
 
@@ -421,12 +430,15 @@ namespace Penguin.DependencyInjection
                 toReturn = true;
             }
 
-            ResolvableTypes.TryAdd(t, toReturn);
+            _ = ResolvableTypes.TryAdd(t, toReturn);
 
             return toReturn;
         }
 
-        internal static bool IsValidIEnumerable(Type t) => IsValidIEnumerable(t, out Type _);
+        internal static bool IsValidIEnumerable(Type t)
+        {
+            return IsValidIEnumerable(t, out Type _);
+        }
 
         internal static bool IsValidIEnumerable(Type t, out Type collectionType)
         {

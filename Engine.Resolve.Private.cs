@@ -53,7 +53,10 @@ namespace Penguin.DependencyInjection
             return toReturn;
         }
 
-        private static T Resolve<T>(ResolutionPackage resolutionPackage) where T : class => Resolve(typeof(T), resolutionPackage) as T;
+        private static T Resolve<T>(ResolutionPackage resolutionPackage) where T : class
+        {
+            return Resolve(typeof(T), resolutionPackage) as T;
+        }
 
         private static object Resolve(Type t, ResolutionPackage resolutionPackage, bool optional = false)
         {
@@ -68,7 +71,7 @@ namespace Penguin.DependencyInjection
 
                 foreach (object thisItem in ResolveMany(t, resolutionPackage))
                 {
-                    toReturn.Add(thisItem);
+                    _ = toReturn.Add(thisItem);
                 }
 
                 return toReturn;

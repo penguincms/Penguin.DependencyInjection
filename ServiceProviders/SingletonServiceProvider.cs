@@ -27,7 +27,7 @@ namespace Penguin.DependencyInjection.ServiceProviders
             }
             else
             {
-                Instances.TryAdd(t, new List<object>() { o });
+                _ = Instances.TryAdd(t, new List<object>() { o });
             }
         }
 
@@ -36,6 +36,9 @@ namespace Penguin.DependencyInjection.ServiceProviders
         /// </summary>
         /// <param name="t">The type of registration to return</param>
         /// <returns>The object registered to that type</returns>
-        public override object GetService(Type t) => Instances.TryGetValue(t, out List<object> instances) ? instances : new List<object>();
+        public override object GetService(Type t)
+        {
+            return Instances.TryGetValue(t, out List<object> instances) ? instances : new List<object>();
+        }
     }
 }

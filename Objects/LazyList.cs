@@ -40,8 +40,14 @@ namespace Penguin.DependencyInjection.Objects
         /// Returns the underlying enumerator for the list
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<T> GetEnumerator() => this.BackingObject.GetEnumerator();
+        public IEnumerator<T> GetEnumerator()
+        {
+            return this.BackingObject.GetEnumerator();
+        }
 
-        IEnumerator IEnumerable.GetEnumerator() => this.BackingObject.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.BackingObject.GetEnumerator();
+        }
     }
 }

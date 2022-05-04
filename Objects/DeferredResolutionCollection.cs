@@ -51,9 +51,15 @@ namespace Penguin.DependencyInjection.Objects
             }
         }
 
-        public void Add(Func<TItem> resolution) => this.DeferredResolvers.Add(new DeferredResolutionItem(resolution));
+        public void Add(Func<TItem> resolution)
+        {
+            this.DeferredResolvers.Add(new DeferredResolutionItem(resolution));
+        }
 
-        void IDeferredResolutionCollection.Add<T>(Func<T> resolution) => this.Add(() => resolution.Invoke() as TItem);
+        void IDeferredResolutionCollection.Add<T>(Func<T> resolution)
+        {
+            this.Add(() => resolution.Invoke() as TItem);
+        }
 
         public IEnumerator<TItem> GetEnumerator()
         {
@@ -70,6 +76,9 @@ namespace Penguin.DependencyInjection.Objects
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
     }
 }

@@ -60,7 +60,7 @@ namespace Penguin.DependencyInjection.Objects
         {
             if (Engine.DetectCircularResolution)
             {
-                this.RegistrationStack.Pop();
+                _ = this.RegistrationStack.Pop();
             }
         }
     }
