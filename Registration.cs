@@ -59,12 +59,18 @@ namespace Penguin.DependencyInjection
         }
 
         private Func<IServiceProvider, object> _InjectionFactory { get; set; }
+
         private Type _RegisteredType { get; set; }
+
         private Type _ServiceProvider { get; set; }
+
         private Type _ToInstantiate { get; set; }
 #if DEBUG
+
         public string RegisteredTypeName { get; set; }
+
         public string ToInstantiateName { get; set; }
+
         public string ServiceProviderName { get; set; }
 #endif
     }

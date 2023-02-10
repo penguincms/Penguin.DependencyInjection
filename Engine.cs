@@ -50,10 +50,15 @@ namespace Penguin.DependencyInjection
         public static bool DetectCircularResolution { get; set; }
 
         internal static ConcurrentDictionary<Type, List<PropertyInfo>> ChildDependencies { get; set; }
+
         internal static ConcurrentDictionary<Type, ConcurrentList<Registration>> Registrations { get; set; }
+
         internal static IDictionary<Type, AbstractServiceProvider> StaticProviders { get; set; } = new ConcurrentDictionary<Type, AbstractServiceProvider>();
+
         internal IDictionary<Type, AbstractServiceProvider> AllProviders { get; set; } = new ConcurrentDictionary<Type, AbstractServiceProvider>();
+
         internal IDictionary<Type, AbstractServiceProvider> ScopedProviders { get; set; } = new Dictionary<Type, AbstractServiceProvider>();
+
         private static ConcurrentDictionary<Type, bool> ResolvableTypes { get; set; } = new ConcurrentDictionary<Type, bool>();
 
         /// <summary>
