@@ -20,13 +20,13 @@ namespace Penguin.DependencyInjection.ServiceProviders
         /// <param name="o">The object instance to add</param>
         public override void Add(Type t, object o)
         {
-            if (this.Instances.TryGetValue(t, out List<object> instances))
+            if (Instances.TryGetValue(t, out List<object> instances))
             {
                 instances.Add(o);
             }
             else
             {
-                this.Instances.Add(t, new List<object>() { o });
+                Instances.Add(t, new List<object>() { o });
             }
         }
 
@@ -35,7 +35,7 @@ namespace Penguin.DependencyInjection.ServiceProviders
         /// </summary>
         public void Clear()
         {
-            foreach (KeyValuePair<Type, List<object>> instanceContainer in this.Instances)
+            foreach (KeyValuePair<Type, List<object>> instanceContainer in Instances)
             {
                 foreach (object o in instanceContainer.Value)
                 {
@@ -46,17 +46,17 @@ namespace Penguin.DependencyInjection.ServiceProviders
                 }
             }
 
-            this.Instances.Clear();
+            Instances.Clear();
         }
 
         /// <summary>
         /// Gets a LIST of object instances by the registered type
         /// </summary>
-        /// <param name="t">The registration type for the object to retrieve</param>
+        /// <param name="serviceType">The registration type for the object to retrieve</param>
         /// <returns>A LIST of object instances that are part of the type registration</returns>
-        public override object GetService(Type t)
+        public override object GetService(Type serviceType)
         {
-            return this.Instances.TryGetValue(t, out List<object> instances) ? instances : new List<object>();
+            return Instances.TryGetValue(serviceType, out List<object> instances) ? instances : new List<object>();
         }
     }
 }

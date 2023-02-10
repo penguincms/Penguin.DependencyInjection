@@ -13,7 +13,7 @@ namespace Penguin.DependencyInjection.Objects
         /// <summary>
         /// Returns a count of the items in the collection
         /// </summary>
-        public int Count => ((IList<T>)this.Backing).Count;
+        public int Count => ((IList<T>)Backing).Count;
 
         /// <summary>
         /// This is not read only
@@ -32,8 +32,8 @@ namespace Penguin.DependencyInjection.Objects
         /// </summary>
         public ConcurrentList()
         {
-            this.Backing = new List<T>();
-            this.ListLock = new object();
+            Backing = new List<T>();
+            ListLock = new object();
         }
 
         /// <summary>
@@ -46,17 +46,17 @@ namespace Penguin.DependencyInjection.Objects
             get
             {
                 T result;
-                lock (this.ListLock)
+                lock (ListLock)
                 {
-                    result = ((IList<T>)this.Backing)[index];
+                    result = ((IList<T>)Backing)[index];
                 }
                 return result;
             }
             set
             {
-                lock (this.ListLock)
+                lock (ListLock)
                 {
-                    ((IList<T>)this.Backing)[index] = value;
+                    ((IList<T>)Backing)[index] = value;
                 }
             }
         }
@@ -64,12 +64,12 @@ namespace Penguin.DependencyInjection.Objects
         /// <summary>
         /// Adds a new object to this collection
         /// </summary>
-        /// <param name="o">The object to add</param>
-        public void Add(T o)
+        /// <param name="item">The object to add</param>
+        public void Add(T item)
         {
-            lock (this.ListLock)
+            lock (ListLock)
             {
-                this.Backing.Add(o);
+                Backing.Add(item);
             }
         }
 
@@ -78,9 +78,9 @@ namespace Penguin.DependencyInjection.Objects
         /// </summary>
         public void Clear()
         {
-            lock (this.ListLock)
+            lock (ListLock)
             {
-                ((IList<T>)this.Backing).Clear();
+                ((IList<T>)Backing).Clear();
             }
         }
 
@@ -92,9 +92,9 @@ namespace Penguin.DependencyInjection.Objects
         public bool Contains(T item)
         {
             bool result;
-            lock (this.ListLock)
+            lock (ListLock)
             {
-                result = ((IList<T>)this.Backing).Contains(item);
+                result = ((IList<T>)Backing).Contains(item);
             }
             return result;
         }
@@ -106,9 +106,9 @@ namespace Penguin.DependencyInjection.Objects
         /// <param name="arrayIndex">The index to start the copy at</param>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            lock (this.ListLock)
+            lock (ListLock)
             {
-                ((IList<T>)this.Backing).CopyTo(array, arrayIndex);
+                ((IList<T>)Backing).CopyTo(array, arrayIndex);
             }
         }
 
@@ -119,9 +119,9 @@ namespace Penguin.DependencyInjection.Objects
         public IEnumerator<T> GetEnumerator()
         {
             IEnumerator<T> enumerator;
-            lock (this.ListLock)
+            lock (ListLock)
             {
-                enumerator = this.Backing.ToList().GetEnumerator();
+                enumerator = Backing.ToList().GetEnumerator();
             }
             return enumerator;
         }
@@ -129,9 +129,9 @@ namespace Penguin.DependencyInjection.Objects
         IEnumerator IEnumerable.GetEnumerator()
         {
             IEnumerator<T> enumerator;
-            lock (this.ListLock)
+            lock (ListLock)
             {
-                enumerator = this.Backing.ToList().GetEnumerator();
+                enumerator = Backing.ToList().GetEnumerator();
             }
             return enumerator;
         }
@@ -144,9 +144,9 @@ namespace Penguin.DependencyInjection.Objects
         public int IndexOf(T item)
         {
             int i;
-            lock (this.ListLock)
+            lock (ListLock)
             {
-                i = ((IList<T>)this.Backing).IndexOf(item);
+                i = ((IList<T>)Backing).IndexOf(item);
             }
             return i;
         }
@@ -158,9 +158,9 @@ namespace Penguin.DependencyInjection.Objects
         /// <param name="item">The item to insert</param>
         public void Insert(int index, T item)
         {
-            lock (this.ListLock)
+            lock (ListLock)
             {
-                ((IList<T>)this.Backing).Insert(index, item);
+                ((IList<T>)Backing).Insert(index, item);
             }
         }
 
@@ -170,9 +170,9 @@ namespace Penguin.DependencyInjection.Objects
         /// <param name="o">The object to remove</param>
         public void Remove(T o)
         {
-            lock (this.ListLock)
+            lock (ListLock)
             {
-                _ = this.Backing.Remove(o);
+                _ = Backing.Remove(o);
             }
         }
 
@@ -184,9 +184,9 @@ namespace Penguin.DependencyInjection.Objects
         bool ICollection<T>.Remove(T item)
         {
             bool result;
-            lock (this.ListLock)
+            lock (ListLock)
             {
-                result = ((IList<T>)this.Backing).Remove(item);
+                result = ((IList<T>)Backing).Remove(item);
             }
             return result;
         }
@@ -197,9 +197,9 @@ namespace Penguin.DependencyInjection.Objects
         /// <param name="index">The idex of the item to remove</param>
         public void RemoveAt(int index)
         {
-            lock (this.ListLock)
+            lock (ListLock)
             {
-                ((IList<T>)this.Backing).RemoveAt(index);
+                ((IList<T>)Backing).RemoveAt(index);
             }
         }
     }

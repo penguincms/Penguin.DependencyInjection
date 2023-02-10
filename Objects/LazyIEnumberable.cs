@@ -15,12 +15,9 @@ namespace Penguin.DependencyInjection.Objects
         {
             get
             {
-                if (this.backingObject == null)
-                {
-                    this.backingObject = this.LoadMe.Invoke() ?? new List<T>();
-                }
+                backingObject ??= LoadMe.Invoke() ?? new List<T>();
 
-                return this.backingObject;
+                return backingObject;
             }
         }
 
@@ -32,7 +29,7 @@ namespace Penguin.DependencyInjection.Objects
         /// <param name="loadingMethod">A Func that should be called on access to return an IEnumerable of the provided type</param>
         public LazyIEnumerable(Func<IEnumerable<T>> loadingMethod)
         {
-            this.LoadMe = loadingMethod;
+            LoadMe = loadingMethod;
         }
     }
 }

@@ -26,16 +26,16 @@ namespace Penguin.DependencyInjection.ServiceScopes
         /// </summary>
         public ScopedServiceScope()
         {
-            Engine engine = new Engine();
+            Engine engine = new();
 
-            this.RequestProvider = new ScopedServiceProvider();
+            RequestProvider = new ScopedServiceProvider();
 
-            engine.Register(this.RequestProvider);
+            engine.Register(RequestProvider);
 
-            this.RequestProvider.Add(engine);
-            this.RequestProvider.Add(typeof(IServiceProvider), engine);
+            RequestProvider.Add(engine);
+            RequestProvider.Add(typeof(IServiceProvider), engine);
 
-            this.ServiceProvider = engine;
+            ServiceProvider = engine;
         }
 
         // This code added to correctly implement the disposable pattern.
@@ -45,7 +45,7 @@ namespace Penguin.DependencyInjection.ServiceScopes
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            this.Dispose(true);
+            Dispose(true);
             // TODO: uncomment the following line if the finalizer is overridden above.
             GC.SuppressFinalize(this);
         }
@@ -56,18 +56,18 @@ namespace Penguin.DependencyInjection.ServiceScopes
         /// <param name="disposing">True if clear managed</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposedValue)
+            if (!disposedValue)
             {
                 if (disposing)
                 {
-                    this.RequestProvider.Clear();
-                    this.RequestProvider = null;
+                    RequestProvider.Clear();
+                    RequestProvider = null;
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
 
-                this.disposedValue = true;
+                disposedValue = true;
             }
         }
 
@@ -84,7 +84,7 @@ namespace Penguin.DependencyInjection.ServiceScopes
         /// </summary>
         ~ScopedServiceScope()
         {
-            this.Dispose(false);
+            Dispose(false);
         }
     }
 }

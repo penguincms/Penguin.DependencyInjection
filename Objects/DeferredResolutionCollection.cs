@@ -26,44 +26,44 @@ namespace Penguin.DependencyInjection.Objects
 
             internal DeferredResolutionItem(Func<TItem> resolution)
             {
-                this.Resolution = resolution;
+                Resolution = resolution;
             }
 
             public TItem GetValue()
             {
-                switch (this.State)
+                switch (State)
                 {
                     case DeferredResolutionState.Resolving:
                         throw new Exception("The internal object is already resolving and can not be called again on this stack until resolution is completed");
                     case DeferredResolutionState.Resolved:
-                        return this.Value;
+                        return Value;
 
                     case DeferredResolutionState.Unresolved:
-                        this.State = DeferredResolutionState.Resolving;
-                        this.Value = this.Resolution();
-                        this.State = DeferredResolutionState.Resolved;
-                        this.Resolution = null;
-                        return this.Value;
+                        State = DeferredResolutionState.Resolving;
+                        Value = Resolution();
+                        State = DeferredResolutionState.Resolved;
+                        Resolution = null;
+                        return Value;
 
                     default:
-                        throw new Exception($"Unknown resolution state {this.State}");
+                        throw new Exception($"Unknown resolution state {State}");
                 }
             }
         }
 
         public void Add(Func<TItem> resolution)
         {
-            this.DeferredResolvers.Add(new DeferredResolutionItem(resolution));
+            DeferredResolvers.Add(new DeferredResolutionItem(resolution));
         }
 
         void IDeferredResolutionCollection.Add<T>(Func<T> resolution)
         {
-            this.Add(() => resolution.Invoke() as TItem);
+            Add(() => resolution.Invoke() as TItem);
         }
 
         public IEnumerator<TItem> GetEnumerator()
         {
-            foreach (DeferredResolutionItem deferredResolutionItem in this.DeferredResolvers)
+            foreach (DeferredResolutionItem deferredResolutionItem in DeferredResolvers)
             {
                 if (deferredResolutionItem.State == DeferredResolutionItem.DeferredResolutionState.Resolving)
                 {
@@ -78,7 +78,7 @@ namespace Penguin.DependencyInjection.Objects
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Penguin.DependencyInjection
         /// <returns>The registered or constructed instance of the class, or null, or error</returns>
         public object GetService(Type serviceType)
         {
-            object toReturn = Resolve(serviceType, new ResolutionPackage(this.AllProviders));
+            object toReturn = Resolve(serviceType, new ResolutionPackage(AllProviders));
 
             return toReturn;
         }
@@ -25,7 +25,7 @@ namespace Penguin.DependencyInjection
         /// <returns>The registered or constructed instance of the class, or null, or error</returns>
         public object Resolve(Type t)
         {
-            return Engine.Resolve(t, new ResolutionPackage(this.AllProviders));
+            return Engine.Resolve(t, new ResolutionPackage(AllProviders));
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Penguin.DependencyInjection
         /// <returns>The registered or constructed instance of the class, or null, or error</returns>
         public object Resolve<T>() where T : class
         {
-            return Engine.Resolve(typeof(T), new ResolutionPackage(this.AllProviders)) as T;
+            return Engine.Resolve(typeof(T), new ResolutionPackage(AllProviders)) as T;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Penguin.DependencyInjection
         /// <returns>The registered or constructed instances of the class, or null, or error</returns>
         public IEnumerable ResolveMany(Type t)
         {
-            return Engine.ResolveMany(t, new ResolutionPackage(this.AllProviders));
+            return Engine.ResolveMany(t, new ResolutionPackage(AllProviders));
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Penguin.DependencyInjection
         /// <returns>The same object</returns>
         public object ResolveProperties(object o)
         {
-            return Engine.ResolveProperties(o, new ResolutionPackage(this.AllProviders));
+            return Engine.ResolveProperties(o, new ResolutionPackage(AllProviders));
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Penguin.DependencyInjection
         /// <returns>The registered or constructed instances of the class, or null, or error</returns>
         public object ResolveSingle(Type t)
         {
-            return Engine.ResolveSingle(t, new ResolutionPackage(this.AllProviders));
+            return Engine.ResolveSingle(t, new ResolutionPackage(AllProviders));
         }
     }
 }

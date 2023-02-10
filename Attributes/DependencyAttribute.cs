@@ -16,7 +16,7 @@ namespace Penguin.DependencyInjection.Attributes
         /// <summary>
         /// I dont actually know what the intent of this was so dont use it
         /// </summary>
-        public bool FindService { get; set; }
+        public bool FindService { get; internal set; }
 
         /// <summary>
         /// Creates an instance of the attribute instructing the injector to use a specified type if this property type is unregistered
@@ -24,7 +24,7 @@ namespace Penguin.DependencyInjection.Attributes
         /// <param name="defaultType">The type to resolve this property to if no registrations are found</param>
         public DependencyAttribute(Type defaultType) : this(true)
         {
-            this.Default = defaultType;
+            Default = defaultType;
         }
 
         /// <summary>
@@ -33,7 +33,9 @@ namespace Penguin.DependencyInjection.Attributes
         /// <param name="findService">Dont set this because I dont know what it does</param>
         public DependencyAttribute(bool findService = false)
         {
-            this.FindService = findService;
+            FindService = findService;
         }
+
+        public Type DefaultType { get; }
     }
 }

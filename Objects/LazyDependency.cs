@@ -20,17 +20,17 @@ namespace Penguin.DependencyInjection.Objects
         {
             get
             {
-                if (!this.IsLoaded)
+                if (!IsLoaded)
                 {
-                    this.value = this.ServiceProvider.GetService<T>();
-                    this.IsLoaded = true;
+                    value = ServiceProvider.GetService<T>();
+                    IsLoaded = true;
                 }
 
-                return this.value;
+                return value;
             }
             set
             {
-                this.IsLoaded = true;
+                IsLoaded = true;
 
                 this.value = value;
             }

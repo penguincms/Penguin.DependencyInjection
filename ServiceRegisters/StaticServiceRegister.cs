@@ -29,20 +29,13 @@ namespace Penguin.DependencyInjection.ServiceRegisters
 
         internal static Type GetServiceProvider(ServiceLifetime lifetime)
         {
-            switch (lifetime)
+            return lifetime switch
             {
-                case ServiceLifetime.Scoped:
-                    return typeof(ScopedServiceProvider);
-
-                case ServiceLifetime.Singleton:
-                    return typeof(SingletonServiceProvider);
-
-                case ServiceLifetime.Transient:
-                    return typeof(TransientServiceProvider);
-
-                default:
-                    throw new Exception($"Service provider for lifetime {lifetime} not mapped");
-            }
+                ServiceLifetime.Scoped => typeof(ScopedServiceProvider),
+                ServiceLifetime.Singleton => typeof(SingletonServiceProvider),
+                ServiceLifetime.Transient => typeof(TransientServiceProvider),
+                _ => throw new Exception($"Service provider for lifetime {lifetime} not mapped"),
+            };
         }
     }
 }

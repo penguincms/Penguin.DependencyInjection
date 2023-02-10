@@ -38,19 +38,31 @@ namespace Penguin.DependencyInjection.Exceptions
         /// <summary>
         /// A string message containing all of the information found in concrete form in this exception (for logging)
         /// </summary>
-        public override string Message => this.MessageText;
+        public override string Message => MessageText;
 
         internal string MessageText { get; set; }
 
         internal MissingInjectableConstructorException(Type failingType)
         {
-            this.FailingType = failingType;
-            this.FailedConstructors = new List<FailingConstructor>();
+            FailingType = failingType;
+            FailedConstructors = new List<FailingConstructor>();
         }
 
         internal void SetMessage(string message)
         {
-            this.MessageText = message;
+            MessageText = message;
+        }
+
+        public MissingInjectableConstructorException()
+        {
+        }
+
+        public MissingInjectableConstructorException(string message) : base(message)
+        {
+        }
+
+        public MissingInjectableConstructorException(string message, Exception innerException) : base(message, innerException)
+        {
         }
     }
 }

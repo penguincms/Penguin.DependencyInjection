@@ -135,9 +135,9 @@ namespace Penguin.DependencyInjection
                 throw new ArgumentException($"Can not register object of type {o.GetType().FullName} to type {y.FullName} because it is not assignable");
             }
 
-            lifetimeManager = lifetimeManager ?? typeof(SingletonServiceProvider);
+            lifetimeManager ??= typeof(SingletonServiceProvider);
 
-            Registration thisRegistration = new Registration()
+            Registration thisRegistration = new()
             {
                 ServiceProvider = lifetimeManager,
                 RegisteredType = y

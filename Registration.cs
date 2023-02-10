@@ -11,19 +11,19 @@ namespace Penguin.DependencyInjection
         /// <summary>
         /// A Func to be used when creating the instance
         /// </summary>
-        public Func<IServiceProvider, object> InjectionFactory { get => this._InjectionFactory; set => this._InjectionFactory = value; }
+        public Func<IServiceProvider, object> InjectionFactory { get => _InjectionFactory; set => _InjectionFactory = value; }
 
         /// <summary>
         /// The "Key" type defining what request type this registration applies to
         /// </summary>
         public Type RegisteredType
         {
-            get => this._RegisteredType;
+            get => _RegisteredType;
             set
             {
-                this._RegisteredType = value;
+                _RegisteredType = value;
 #if DEBUG
-                this.RegisteredTypeName = value?.ToString();
+                RegisteredTypeName = value?.ToString();
 #endif
             }
         }
@@ -33,12 +33,12 @@ namespace Penguin.DependencyInjection
         /// </summary>
         public Type ServiceProvider
         {
-            get => this._ServiceProvider ?? typeof(TransientServiceProvider);
+            get => _ServiceProvider ?? typeof(TransientServiceProvider);
             set
             {
-                this._ServiceProvider = value;
+                _ServiceProvider = value;
 #if DEBUG
-                this.ServiceProviderName = value?.ToString();
+                ServiceProviderName = value?.ToString();
 #endif
             }
         }
@@ -48,12 +48,12 @@ namespace Penguin.DependencyInjection
         /// </summary>
         public Type ToInstantiate
         {
-            get => this._ToInstantiate ?? this._RegisteredType;
+            get => _ToInstantiate ?? _RegisteredType;
             set
             {
-                this._ToInstantiate = value;
+                _ToInstantiate = value;
 #if DEBUG
-                this.ToInstantiateName = value?.ToString();
+                ToInstantiateName = value?.ToString();
 #endif
             }
         }

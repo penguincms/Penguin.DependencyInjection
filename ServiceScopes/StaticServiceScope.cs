@@ -22,12 +22,9 @@ namespace Penguin.DependencyInjection.ServiceScopes
         /// </summary>
         public StaticServiceScope()
         {
-            if (Engine is null)
-            {
-                Engine = new Engine();
-            }
+            Engine ??= new Engine();
 
-            this.ServiceProvider = Engine;
+            ServiceProvider = Engine;
         }
 
         // This code added to correctly implement the disposable pattern.
@@ -37,7 +34,7 @@ namespace Penguin.DependencyInjection.ServiceScopes
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            this.Dispose(true);
+            Dispose(true);
             // TODO: uncomment the following line if the finalizer is overridden above.
             GC.SuppressFinalize(this);
         }
@@ -48,7 +45,7 @@ namespace Penguin.DependencyInjection.ServiceScopes
         /// <param name="disposing">Unused</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposedValue)
+            if (!disposedValue)
             {
                 if (disposing)
                 {
@@ -58,7 +55,7 @@ namespace Penguin.DependencyInjection.ServiceScopes
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
 
-                this.disposedValue = true;
+                disposedValue = true;
             }
         }
 
@@ -75,7 +72,7 @@ namespace Penguin.DependencyInjection.ServiceScopes
         /// </summary>
         ~StaticServiceScope()
         {
-            this.Dispose(false);
+            Dispose(false);
         }
     }
 }

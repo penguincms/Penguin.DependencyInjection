@@ -33,23 +33,23 @@ namespace Penguin.DependencyInjection.Objects
         /// <param name="serviceProviders"></param>
         public ResolutionPackage(IDictionary<Type, AbstractServiceProvider> serviceProviders)
         {
-            this.ServiceProviders = serviceProviders;
-            this.ResolutionPackageServices.Add(this.GetType(), this);
+            ServiceProviders = serviceProviders;
+            ResolutionPackageServices.Add(GetType(), this);
         }
 
         internal void AddStack(Registration match)
         {
             if (Engine.DetectCircularResolution)
             {
-                if (!this.RegistrationStack.Contains(match))
+                if (!RegistrationStack.Contains(match))
                 {
-                    this.RegistrationStack.Push(match);
+                    RegistrationStack.Push(match);
                 }
                 else
                 {
-                    this.RegistrationStack.Push(match);
+                    RegistrationStack.Push(match);
 
-                    string toThrow = string.Join(" => ", this.RegistrationStack.Select(s => $"{s.RegisteredType.Name} : {s.ToInstantiate.Name}"));
+                    string toThrow = string.Join(" => ", RegistrationStack.Select(s => $"{s.RegisteredType.Name} : {s.ToInstantiate.Name}"));
 
                     throw new StackOverflowException(toThrow);
                 }
@@ -60,7 +60,7 @@ namespace Penguin.DependencyInjection.Objects
         {
             if (Engine.DetectCircularResolution)
             {
-                _ = this.RegistrationStack.Pop();
+                _ = RegistrationStack.Pop();
             }
         }
     }

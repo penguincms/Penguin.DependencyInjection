@@ -18,12 +18,12 @@ namespace Penguin.DependencyInjection.Objects
         {
             get
             {
-                if (!this.Loaded)
+                if (!Loaded)
                 {
-                    this.value = this.LoadMe.Invoke();
+                    value = LoadMe.Invoke();
                 }
 
-                return this.value;
+                return value;
             }
         }
 
@@ -37,7 +37,7 @@ namespace Penguin.DependencyInjection.Objects
         /// <param name="loadingMethod">A func that returns an object of the requested type</param>
         public LazyObject(Func<T> loadingMethod) : base(null)
         {
-            this.LoadMe = loadingMethod;
+            LoadMe = loadingMethod;
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Penguin.DependencyInjection.Objects
         /// <param name="serviceProvider">A service provider configured to return an instance of the requested object</param>
         public LazyObject(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            this.LoadMe = new Func<T>(() => this.ServiceProvider.GetService<T>());
+            LoadMe = new Func<T>(() => ServiceProvider.GetService<T>());
         }
     }
 }

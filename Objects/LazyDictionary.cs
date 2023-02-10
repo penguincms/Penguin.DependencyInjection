@@ -18,7 +18,7 @@ namespace Penguin.DependencyInjection.Objects
         /// <param name="loadingMethod">A func that returns a constructed instance of the underlying type</param>
         public LazyDictionary(Func<TKey, TValue> loadingMethod)
         {
-            this.loadMe = loadingMethod;
+            loadMe = loadingMethod;
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace Penguin.DependencyInjection.Objects
         /// </summary>
         /// <param name="key">The key to check for</param>
         /// <returns>The value associated with the key</returns>
-        public new TValue this[TKey key] => this.GetValue(key);
+        public new TValue this[TKey key] => GetValue(key);
 
         /// <summary>
         /// Returns a value from the dictionary based on the key
@@ -35,9 +35,9 @@ namespace Penguin.DependencyInjection.Objects
         /// <returns>The value associated with the key</returns>
         protected virtual TValue GetValue(TKey key)
         {
-            if (!this.ContainsKey(key))
+            if (!ContainsKey(key))
             {
-                TValue toReturn = this.loadMe.Invoke(key);
+                TValue toReturn = loadMe.Invoke(key);
 
                 if (toReturn == null)
                 {
@@ -45,7 +45,7 @@ namespace Penguin.DependencyInjection.Objects
                 }
                 else
                 {
-                    this.Add(key, toReturn);
+                    Add(key, toReturn);
                     return toReturn;
                 }
             }

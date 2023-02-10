@@ -16,7 +16,7 @@ namespace Penguin.DependencyInjection.Objects
         /// <param name="serviceProvider">The service provider to use as a data source</param>
         protected LazyBase(IServiceProvider serviceProvider)
         {
-            this.ServiceProvider = serviceProvider;
+            ServiceProvider = serviceProvider;
         }
     }
 }

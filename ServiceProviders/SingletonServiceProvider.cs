@@ -34,11 +34,11 @@ namespace Penguin.DependencyInjection.ServiceProviders
         /// <summary>
         /// Gets an object by the registered type
         /// </summary>
-        /// <param name="t">The type of registration to return</param>
+        /// <param name="serviceType">The type of registration to return</param>
         /// <returns>The object registered to that type</returns>
-        public override object GetService(Type t)
+        public override object GetService(Type serviceType)
         {
-            return Instances.TryGetValue(t, out List<object> instances) ? instances : new List<object>();
+            return Instances.TryGetValue(serviceType, out List<object> instances) ? instances : new List<object>();
         }
     }
 }

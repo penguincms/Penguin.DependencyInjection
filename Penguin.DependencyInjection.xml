@@ -348,7 +348,7 @@
             <summary>
             Adds a new object to this collection
             </summary>
-            <param name="o">The object to add</param>
+            <param name="item">The object to add</param>
         </member>
         <member name="M:Penguin.DependencyInjection.Objects.ConcurrentList`1.Clear">
             <summary>
@@ -590,7 +590,7 @@
             <summary>
             Used to return any objects matching the specified type, from the container
             </summary>
-            <param name="t">The type to use as the Key</param>
+            <param name="serviceType">The type to use as the Key</param>
             <returns>A List of objects (as an object) that match the Key. Cast the list to access the contents</returns>
         </member>
         <member name="T:Penguin.DependencyInjection.ServiceProviders.ScopedServiceProvider">
@@ -619,7 +619,7 @@
             <summary>
             Gets a LIST of object instances by the registered type
             </summary>
-            <param name="t">The registration type for the object to retrieve</param>
+            <param name="serviceType">The registration type for the object to retrieve</param>
             <returns>A LIST of object instances that are part of the type registration</returns>
         </member>
         <member name="T:Penguin.DependencyInjection.ServiceProviders.SingletonServiceProvider">
@@ -643,7 +643,7 @@
             <summary>
             Gets an object by the registered type
             </summary>
-            <param name="t">The type of registration to return</param>
+            <param name="serviceType">The type of registration to return</param>
             <returns>The object registered to that type</returns>
         </member>
         <member name="T:Penguin.DependencyInjection.ServiceProviders.StaticServiceProvider">
@@ -674,7 +674,7 @@
             <summary>
             Not used
             </summary>
-            <param name="t">Not used</param>
+            <param name="serviceType">Not used</param>
             <returns>Not used</returns>
         </member>
         <member name="T:Penguin.DependencyInjection.ServiceScopes.ScopedServiceScope">

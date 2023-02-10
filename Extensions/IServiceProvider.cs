@@ -15,12 +15,7 @@ namespace Penguin.DependencyInjection.Extensions
         /// <returns>Any resolved object casted to the requested type</returns>
         public static T GetService<T>(this IServiceProvider provider) where T : class
         {
-            if (provider is null)
-            {
-                throw new ArgumentNullException(nameof(provider));
-            }
-
-            return provider.GetService(typeof(T)) as T;
+            return provider is null ? throw new ArgumentNullException(nameof(provider)) : provider.GetService(typeof(T)) as T;
         }
     }
 }

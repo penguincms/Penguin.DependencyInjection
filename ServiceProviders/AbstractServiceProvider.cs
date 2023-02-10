@@ -25,14 +25,14 @@ namespace Penguin.DependencyInjection.ServiceProviders
                 throw new ArgumentNullException(nameof(o));
             }
 
-            this.Add(o.GetType(), o);
+            Add(o.GetType(), o);
         }
 
         /// <summary>
         /// Used to return any objects matching the specified type, from the container
         /// </summary>
-        /// <param name="t">The type to use as the Key</param>
+        /// <param name="serviceType">The type to use as the Key</param>
         /// <returns>A List of objects (as an object) that match the Key. Cast the list to access the contents</returns>
-        public abstract object GetService(Type t);
+        public abstract object GetService(Type serviceType);
     }
 }

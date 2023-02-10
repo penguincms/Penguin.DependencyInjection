@@ -22,9 +22,9 @@ namespace Penguin.DependencyInjection
     {
         private const string WRONG_SERVICE_PROVIDER_MESSAGE = "Service provider must inherit from either abstract or scoped";
 
-        private static readonly ConcurrentDictionary<Type, Type> dependencyConsolidators = new ConcurrentDictionary<Type, Type>();
+        private static readonly ConcurrentDictionary<Type, Type> dependencyConsolidators = new();
 
-        private static readonly StaticServiceRegister Registrar = new StaticServiceRegister();
+        private static readonly StaticServiceRegister Registrar = new();
 
         /// <summary>
         /// Returns a copy of the internal dependency consolidator list
@@ -33,7 +33,7 @@ namespace Penguin.DependencyInjection
         {
             get
             {
-                Dictionary<Type, Type> toReturn = new Dictionary<Type, Type>(dependencyConsolidators.Count);
+                Dictionary<Type, Type> toReturn = new(dependencyConsolidators.Count);
 
                 foreach (KeyValuePair<Type, Type> consolidator in dependencyConsolidators)
                 {
@@ -47,7 +47,7 @@ namespace Penguin.DependencyInjection
         /// <summary>
         /// If true, maintains a resolution stack to attempt to prevent a stack overflow. Likely incurs a performance penalty. Useful for debugging. Default false.
         /// </summary>
-        public static bool DetectCircularResolution { get; set; } = false;
+        public static bool DetectCircularResolution { get; set; }
 
         internal static ConcurrentDictionary<Type, List<PropertyInfo>> ChildDependencies { get; set; }
         internal static ConcurrentDictionary<Type, ConcurrentList<Registration>> Registrations { get; set; }
@@ -142,7 +142,7 @@ namespace Penguin.DependencyInjection
 
             foreach (KeyValuePair<Type, AbstractServiceProvider> provider in StaticProviders)
             {
-                this.AllProviders.Add(provider);
+                AllProviders.Add(provider);
             }
         }
 
@@ -158,7 +158,7 @@ namespace Penguin.DependencyInjection
 
             foreach (KeyValuePair<Type, AbstractServiceProvider> provider in resolutionPackage.ServiceProviders)
             {
-                this.AllProviders.Add(provider.Key, provider.Value);
+                AllProviders.Add(provider.Key, provider.Value);
             }
         }
 
@@ -168,11 +168,11 @@ namespace Penguin.DependencyInjection
         /// <returns>A clone of the current registrations</returns>
         public static ConcurrentDictionary<Type, ConcurrentList<Registration>> GetRegistrations()
         {
-            ConcurrentDictionary<Type, ConcurrentList<Registration>> toReturn = new ConcurrentDictionary<Type, ConcurrentList<Registration>>();
+            ConcurrentDictionary<Type, ConcurrentList<Registration>> toReturn = new();
 
             foreach (KeyValuePair<Type, ConcurrentList<Registration>> keyValuePair in Registrations)
             {
-                ConcurrentList<Registration> list = new ConcurrentList<Registration>();
+                ConcurrentList<Registration> list = new();
 
                 foreach (Registration r in keyValuePair.Value)
                 {
@@ -262,14 +262,14 @@ namespace Penguin.DependencyInjection
             }
             else if (serviceProvider is ScopedServiceProvider)
             {
-                this.ScopedProviders.Add(serviceProvider.GetType(), serviceProvider as ScopedServiceProvider);
+                ScopedProviders.Add(serviceProvider.GetType(), serviceProvider as ScopedServiceProvider);
             }
             else
             {
                 throw new ArgumentException(WRONG_SERVICE_PROVIDER_MESSAGE);
             }
 
-            this.AllProviders.Add(serviceProvider.GetType(), serviceProvider);
+            AllProviders.Add(serviceProvider.GetType(), serviceProvider);
         }
 
         internal static bool AnyRegistration(Type t)
@@ -308,9 +308,9 @@ namespace Penguin.DependencyInjection
         /// <returns></returns>
         internal static Registration GenerateRegistration(Type y, Type x, Func<IServiceProvider, object> injectionFactory = null, Type serviceProvider = null)
         {
-            serviceProvider = serviceProvider ?? typeof(TransientServiceProvider);
+            serviceProvider ??= typeof(TransientServiceProvider);
 
-            Registration thisRegistration = new Registration()
+            Registration thisRegistration = new()
             {
                 ServiceProvider = serviceProvider,
                 RegisteredType = y,
@@ -318,12 +318,9 @@ namespace Penguin.DependencyInjection
                 InjectionFactory = injectionFactory
             };
 
-            if (!thisRegistration.ServiceProvider.IsSubclassOf(typeof(AbstractServiceProvider)))
-            {
-                throw new Exception($"Attempting to add a service provider registration for non service provider type {serviceProvider.Name}");
-            }
-
-            return thisRegistration;
+            return !thisRegistration.ServiceProvider.IsSubclassOf(typeof(AbstractServiceProvider))
+                ? throw new Exception($"Attempting to add a service provider registration for non service provider type {serviceProvider.Name}")
+                : thisRegistration;
         }
 
         internal static object InstantiateObject(Registration registration, ResolutionPackage resolutionPackage, bool optional = false)
@@ -354,7 +351,7 @@ namespace Penguin.DependencyInjection
 
             if (!optional)
             {
-                StringBuilder registered = new StringBuilder();
+                StringBuilder registered = new();
 
                 foreach (KeyValuePair<Type, ConcurrentList<Registration>> r in Engine.Registrations)
                 {
@@ -366,7 +363,7 @@ namespace Penguin.DependencyInjection
                     }
                 }
 
-                MissingInjectableConstructorException exception = new MissingInjectableConstructorException(registration.ToInstantiate);
+                MissingInjectableConstructorException exception = new(registration.ToInstantiate);
 
                 string DebugText = registered.ToString();
 
@@ -374,7 +371,7 @@ namespace Penguin.DependencyInjection
 
                 foreach (ConstructorInfo constructor in Constructors)
                 {
-                    FailingConstructor failingConstructor = new FailingConstructor
+                    FailingConstructor failingConstructor = new()
                     {
                         Constructor = constructor,
                         MissingParameters = constructor.GetParameters().Where(t => !IsRegistered(t.ParameterType)).ToArray()

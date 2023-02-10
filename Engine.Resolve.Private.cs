@@ -34,7 +34,7 @@ namespace Penguin.DependencyInjection
             }
 
             //If no registration was found, or there was no instance existing
-            if (!(thisManager.GetService(match.ToInstantiate) is IList<object> toReturn) || !toReturn.Any())
+            if (thisManager.GetService(match.ToInstantiate) is not IList<object> toReturn || !toReturn.Any())
             {
                 //Create an instance
                 toReturn = new List<object>();
@@ -107,9 +107,9 @@ namespace Penguin.DependencyInjection
                 return null;
             }
 
-            if (resolutionPackage.ResolutionPackageServices.ContainsKey(t))
+            if (resolutionPackage.ResolutionPackageServices.TryGetValue(t, out object value))
             {
-                return resolutionPackage.ResolutionPackageServices[t];
+                return value;
             }
 
             //This whole IF block attempts to find a dependency consolidator for the requested type, and if its found it squishes all the registered instances into it
