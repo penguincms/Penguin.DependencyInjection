@@ -14,7 +14,7 @@ namespace Penguin.DependencyInjection.Objects
         /// Constructs a new instance of this base class
         /// </summary>
         /// <param name="serviceProvider">The service provider to use as a data source</param>
-        public LazyBase(IServiceProvider serviceProvider)
+        protected LazyBase(IServiceProvider serviceProvider)
         {
             this.ServiceProvider = serviceProvider;
         }
