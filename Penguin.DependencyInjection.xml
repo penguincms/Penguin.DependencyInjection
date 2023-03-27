@@ -48,7 +48,7 @@
         </member>
         <member name="M:Penguin.DependencyInjection.Engine.#cctor">
             <summary>
-            Whitelists a list of assemblies through the Reflection TypeFactory and then grabs all types and attempts to register any types that are relevant to the
+            Whitelists a list of assemblies through the Reflection TypeFactory.Default and then grabs all types and attempts to register any types that are relevant to the
             engine
             </summary>
         </member>

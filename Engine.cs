@@ -63,7 +63,7 @@ namespace Penguin.DependencyInjection
         private static ConcurrentDictionary<Type, bool> ResolvableTypes { get; set; } = new ConcurrentDictionary<Type, bool>();
 
         /// <summary>
-        /// Whitelists a list of assemblies through the Reflection TypeFactory and then grabs all types and attempts to register any types that are relevant to the
+        /// Whitelists a list of assemblies through the Reflection TypeFactory.Default and then grabs all types and attempts to register any types that are relevant to the
         /// engine
         /// </summary>
         static Engine()
@@ -73,7 +73,7 @@ namespace Penguin.DependencyInjection
             ChildDependencies = new ConcurrentDictionary<Type, List<PropertyInfo>>();
             Registrations = new ConcurrentDictionary<Type, ConcurrentList<Registration>>();
 
-            foreach (Type t in TypeFactory.GetAllTypes())
+            foreach (Type t in TypeFactory.Default.GetAllTypes(true))
             {
                 try
                 {
@@ -98,7 +98,7 @@ namespace Penguin.DependencyInjection
                         }
                         else if (autoReg is RegisterThroughMostDerivedAttribute rmd)
                         {
-                            RegisterAllBaseTypes(rmd.RequestType, TypeFactory.GetMostDerivedType(t), StaticServiceRegister.GetServiceProvider(rmd.Lifetime));
+                            RegisterAllBaseTypes(rmd.RequestType, TypeFactory.Default.GetMostDerivedType(t), StaticServiceRegister.GetServiceProvider(rmd.Lifetime));
                         }
                     }
 
@@ -417,7 +417,7 @@ namespace Penguin.DependencyInjection
                 {
                     if (typeof(IRegisterMostDerived).IsAssignableFrom(t))
                     {
-                        Type toRegister = TypeFactory.GetMostDerivedType(t);
+                        Type toRegister = TypeFactory.Default.GetMostDerivedType(t);
 
                         RegisterAllBaseTypes(t, toRegister, typeof(TransientServiceProvider));
                     }
