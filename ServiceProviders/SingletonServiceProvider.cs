@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Penguin.DependencyInjection.ServiceProviders
 {
@@ -38,6 +39,15 @@ namespace Penguin.DependencyInjection.ServiceProviders
         /// <returns>The object registered to that type</returns>
         public override object GetService(Type serviceType)
         {
+            if (serviceType is null)
+            {
+                throw new ArgumentNullException(nameof(serviceType));
+            }
+
+            string name = serviceType.FullName;
+
+            Debug.WriteLine("Resolving: " + name);
+
             return Instances.TryGetValue(serviceType, out List<object> instances) ? instances : new List<object>();
         }
     }
